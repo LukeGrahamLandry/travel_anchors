@@ -1,13 +1,20 @@
 package ca.lukegrahamlandry.travelstaff.enchantments;
 
+import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class TeleportationEnchantment extends Enchantment {
     public static TeleportationEnchantment INSTANCE = new TeleportationEnchantment();
     public TeleportationEnchantment() {
-        super(Rarity.RARE, EnchantmentCategory.WEAPON, new EquipmentSlot[]{EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND});
+        super(Rarity.RARE, EnchantmentCategory.VANISHABLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND});
+    }
+
+    @Override
+    public boolean canEnchant(ItemStack stack) {
+        return EnchantmentCategory.WEAPON.canEnchant(stack.getItem()) || EnchantmentCategory.DIGGER.canEnchant(stack.getItem());
     }
 
     @Override

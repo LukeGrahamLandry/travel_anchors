@@ -1,12 +1,11 @@
 package ca.lukegrahamlandry.travelstaff.item;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
-import io.github.noeppi_noeppi.libx.base.ItemBase;
-import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;

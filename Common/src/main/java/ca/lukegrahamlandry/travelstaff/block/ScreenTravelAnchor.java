@@ -9,14 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,13 +21,15 @@ import javax.annotation.Nullable;
 public class ScreenTravelAnchor extends Screen {
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/travel_anchor.png");
     private final String name;
+    private final BlockPos pos;
     private EditBox textFieldWidget;
     private int imageWidth = 180;
     private int imageHeight = 50;
 
-    public ScreenTravelAnchor(String name) {
+    public ScreenTravelAnchor(String name, BlockPos pos) {
         super(new TextComponent(name));
         this.name = name;
+        this.pos = pos;
     }
 
     @Override
@@ -79,7 +78,7 @@ public class ScreenTravelAnchor extends Screen {
         super.removed();
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(false);
         if (Minecraft.getInstance().level != null) {
-            Services.NETWORK.sendNameChange(this.textFieldWidget.getValue().trim());
+            Services.NETWORK.sendNameChangeToServer(this.textFieldWidget.getValue().trim(), this.pos);
         }
     }
 

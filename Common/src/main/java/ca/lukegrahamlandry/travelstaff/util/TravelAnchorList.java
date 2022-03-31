@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.travelstaff.util;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -98,7 +99,7 @@ public class TravelAnchorList extends SavedData {
             }
             this.setDirty();
             if (needsUpdate) {
-                TravelAnchors.getNetwork().updateTravelAnchorList(level, this);
+                Services.NETWORK.sendAnchorListToClients((ServerLevel) level, this);
             }
         }
     }

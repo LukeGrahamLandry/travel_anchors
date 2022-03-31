@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.travelstaff.block;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.platform.Services;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -36,26 +37,11 @@ public class TileTravelAnchor extends BlockEntity {
         }
     }
 
-    @Nonnull
-    @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag nbt = super.getUpdateTag();
-        nbt.putString("travel_anchor_name", this.name);
-        this.writeMimic(nbt);
-        return nbt;
-    }
-
-    @Override
-    public void handleUpdateTag(CompoundTag nbt) {
-        this.name = nbt.getString("travel_anchor_name");
-        this.readMimic(nbt);
-    }
-
     private void writeMimic(CompoundTag tag) {
         tag.put("mimic", NbtUtils.writeBlockState(this.mimic == null ? Constants.getTravelAnchor().defaultBlockState() : this.mimic));
     }
 
-    private void readMimic(CompoundTag tag) {
+    public void readMimic(CompoundTag tag) {
         if (tag.contains("mimic")) {
             BlockState state = NbtUtils.readBlockState(tag.getCompound("mimic"));
             if (state == Constants.getTravelAnchor().defaultBlockState()) {
@@ -74,7 +60,6 @@ public class TileTravelAnchor extends BlockEntity {
         this.name = name;
         if (this.level != null) {
             TravelAnchorList.get(this.level).setAnchor(this.level, this.worldPosition, name, this.mimic);
-            this.setChanged();
         }
     }
 
@@ -88,6 +73,12 @@ public class TileTravelAnchor extends BlockEntity {
             TravelAnchorList.get(this.level).setAnchor(this.level, this.worldPosition, this.name, mimic);
         }
         this.setChanged();
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if (!this.level.isClientSide()) Services.NETWORK.syncAnchorToClients(this);
     }
 
     // TODO: allow right click to set mimic state for what it renders as?

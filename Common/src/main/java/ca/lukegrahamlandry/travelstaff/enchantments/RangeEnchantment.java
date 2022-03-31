@@ -1,18 +1,17 @@
 package ca.lukegrahamlandry.travelstaff.enchantments;
 
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
-import de.castcrafter.travel_anchors.ModComponents;
-import de.castcrafter.travel_anchors.ModEnchantments;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class RangeEnchantment extends Enchantment {
+    public static RangeEnchantment INSTANCE = new RangeEnchantment();
 
     public RangeEnchantment() {
-        super(Rarity.RARE, ModEnchantments.TELEPORTABLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND});
+        super(Rarity.RARE, EnchantmentCategory.VANISHABLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND});
     }
 
     @Override
@@ -22,12 +21,7 @@ public class RangeEnchantment extends Enchantment {
 
     @Override
     public boolean canEnchant(ItemStack stack) {
-        return stack.getItem() instanceof ItemTravelStaff || EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.teleportation, stack) > 0;
-    }
-
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        return stack.getItem() instanceof ItemTravelStaff || stack.getItem() == Items.BOOK || stack.getItem() == Items.ENCHANTED_BOOK;
+        return stack.getItem() instanceof ItemTravelStaff || EnchantmentHelper.getItemEnchantmentLevel(this, stack) > 0;
     }
 
     @Override

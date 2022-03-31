@@ -12,7 +12,8 @@ public class OutlineRenderType extends RenderType {
     private static final Map<RenderType, OutlineRenderType> TYPES = new HashMap<>();
 
     private final RenderType parent;
-    
+
+    // errors fixed with access transformers
     private OutlineRenderType(RenderType parent) {
         super("Outline" + parent.name, parent.format(), parent.mode(), parent.bufferSize(), parent.affectsCrumbling(), parent.sortOnUpload, parent::setupRenderState, parent::clearRenderState);
         this.parent = parent;

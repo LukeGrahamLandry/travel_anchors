@@ -2,6 +2,8 @@ package ca.lukegrahamlandry.travelstaff.util;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
 import ca.lukegrahamlandry.travelstaff.block.TileTravelAnchor;
+import ca.lukegrahamlandry.travelstaff.enchantments.RangeEnchantment;
+import ca.lukegrahamlandry.travelstaff.enchantments.TeleportationEnchantment;
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.core.BlockPos;
@@ -126,7 +128,7 @@ public class TeleportHandler {
 
     public static boolean canItemTeleport(Player player, InteractionHand hand) {
         return player.getItemInHand(hand).getItem() instanceof ItemTravelStaff
-                || EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.teleportation, player.getItemInHand(hand)) >= 1;
+                || EnchantmentHelper.getItemEnchantmentLevel(TeleportationEnchantment.INSTANCE, player.getItemInHand(hand)) >= 1;
     }
 
     private static double getAngleRadians(Vec3 positionVec, BlockPos anchor, float yRot, float xRot) {
@@ -136,8 +138,8 @@ public class TeleportHandler {
     }
 
     public static double getMaxDistance(Player player) {
-        int mainHandLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.range, player.getItemInHand(InteractionHand.MAIN_HAND));
-        int offHandLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.range, player.getItemInHand(InteractionHand.OFF_HAND));
+        int mainHandLevel = EnchantmentHelper.getItemEnchantmentLevel(RangeEnchantment.INSTANCE, player.getItemInHand(InteractionHand.MAIN_HAND));
+        int offHandLevel = EnchantmentHelper.getItemEnchantmentLevel(RangeEnchantment.INSTANCE, player.getItemInHand(InteractionHand.OFF_HAND));
         int lvl = Math.max(mainHandLevel, offHandLevel);
         return Services.CONFIG.getMaxDistance() * (1 + (lvl / 2d));
     }

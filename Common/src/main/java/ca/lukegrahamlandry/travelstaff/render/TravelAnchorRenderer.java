@@ -1,18 +1,14 @@
 package ca.lukegrahamlandry.travelstaff.render;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
+import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-import de.castcrafter.travel_anchors.ModComponents;
-import de.castcrafter.travel_anchors.TeleportHandler;
-import de.castcrafter.travel_anchors.TravelAnchorList;
-import de.castcrafter.travel_anchors.TravelAnchors;
-import io.github.noeppi_noeppi.libx.annotation.model.Model;
-import io.github.noeppi_noeppi.libx.render.RenderHelperLevel;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -28,9 +24,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
@@ -59,8 +52,7 @@ public class TravelAnchorRenderer {
     @Model("block/travel_anchor")
     public static BakedModel MODEL = null;
 
-    public static void renderAnchors(RenderLevelLastEvent event) {
-        PoseStack poseStack = event.getPoseStack();
+    public static void renderAnchors(PoseStack poseStack, float partialTick) {
         ClientLevel level = Minecraft.getInstance().level;
         LocalPlayer player = Minecraft.getInstance().player;
         if (level != null && player != null) {
@@ -69,16 +61,16 @@ public class TravelAnchorRenderer {
                 double maxDistanceSq = TeleportHandler.getMaxDistance(player);
                 maxDistanceSq = maxDistanceSq * maxDistanceSq;
                 TravelAnchorList list = TravelAnchorList.get(Minecraft.getInstance().level);
-                double posX = Mth.lerp(event.getPartialTick(), player.xo, player.getX());
-                double posY = Mth.lerp(event.getPartialTick(), player.yo, player.getY());
-                double posZ = Mth.lerp(event.getPartialTick(), player.zo, player.getZ());
+                double posX = Mth.lerp(partialTick, player.xo, player.getX());
+                double posY = Mth.lerp(partialTick, player.yo, player.getY());
+                double posZ = Mth.lerp(partialTick, player.zo, player.getZ());
                 Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
                 double projPosX = projection.x;
                 double projPosY = projection.y;
                 double projPosZ = projection.z;
                 Pair<BlockPos, String> pair = TeleportHandler.getAnchorToTeleport(level, player, player.blockPosition().below());
                 for (BlockPos pos : list.anchors.keySet()) {
-                    double distanceSq = pos.distSqr(posX, posY, posZ, true);
+                    double distanceSq = pos.distToLowCornerSqr(posX, posY, posZ);
                     if (distanceSq <= maxDistanceSq) {
                         TravelAnchorList.Entry entry = list.getEntry(pos);
                         if (entry != null) {
@@ -92,7 +84,7 @@ public class TravelAnchorRenderer {
                             boolean active = pair != null && pos.equals(pair.getLeft());
                             boolean directText = distanceSq <= 15 * 15;
                             poseStack.pushPose();
-                            RenderHelperLevel.loadProjection(poseStack, pos);
+                           loadProjection(poseStack, pos);
                             if (distanceSq > 10 * 10) {
                                 double distance = Math.sqrt(distanceSq);
                                 poseStack.translate(0.5, 0.5, 0.5);
@@ -101,7 +93,7 @@ public class TravelAnchorRenderer {
                                 poseStack.scale(scale, scale, scale);
                                 poseStack.translate(-0.5, -0.5, -0.5);
                             }
-                            renderAnchor(poseStack, OutlineBuffer.INSTANCE, directText ? entry.name : null, entry.state, light, true, active, distanceSq, null);
+                            renderAnchor(poseStack, OutlineBuffer.INSTANCE, directText ? entry.name : null, entry.state, light, true, active, distanceSq);
                             poseStack.popPose();
                             if (!directText && !entry.name.trim().isEmpty()) {
                                 // Blit the text at the correct location
@@ -116,7 +108,7 @@ public class TravelAnchorRenderer {
                                     blockScale *= 1.3;
                                 }
 
-                                RenderHelperLevel.loadProjection(poseStack, projPosX, projPosY, projPosZ);
+                               loadProjection(poseStack, projPosX, projPosY, projPosZ);
                                 CircleRotation rot = rotateCircle(projPosX - (pos.getX() + 0.5), projPosY - (pos.getY() + 0.5 + (0.5 * blockScale)), projPosZ - (pos.getZ() + 0.5));
                                 rot.apply(poseStack);
                                 poseStack.translate(0, 5, 0);
@@ -158,7 +150,7 @@ public class TravelAnchorRenderer {
         }
     }
 
-    public static void renderAnchor(PoseStack poseStack, MultiBufferSource buffer, @Nullable String name, BlockState state, int light, boolean glow, boolean active, double distanceSq, @Nullable IModelData modelData) {
+    public static void renderAnchor(PoseStack poseStack, MultiBufferSource buffer, @Nullable String name, BlockState state, int light, boolean glow, boolean active, double distanceSq) {
         if (state == null || state.getBlock() == Constants.getTravelAnchor()) {
             VertexConsumer vertex = buffer.getBuffer(RenderType.solid());
             //noinspection deprecation
@@ -167,8 +159,7 @@ public class TravelAnchorRenderer {
                             MODEL, 1, 1, 1, light, OverlayTexture.NO_OVERLAY);
         } else {
             Minecraft.getInstance().getBlockRenderer()
-                    .renderSingleBlock(state, poseStack, buffer, light, OverlayTexture.NO_OVERLAY,
-                            modelData == null ? EmptyModelData.INSTANCE : modelData);
+                    .renderSingleBlock(state, poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
         }
         if (glow) {
             RenderType type;
@@ -242,5 +233,34 @@ public class TravelAnchorRenderer {
                 poseStack.mulPose(Vector3f.YP.rotation(-this.y));
             }
         }
+    }
+
+
+    /**
+     * This is meant to be called in { RenderLevelLastEvent}. This will move the pose stack to the
+     * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
+     * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
+     */
+    public static void loadProjection(PoseStack poseStack, BlockPos pos) {
+        loadProjection(poseStack, pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    /**
+     * This is meant to be called in { RenderLevelLastEvent}. This will move the pose stack to the
+     * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
+     * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
+     */
+    public static void loadProjection(PoseStack poseStack, Vec3 pos) {
+        loadProjection(poseStack, pos.x, pos.y, pos.z);
+    }
+
+    /**
+     * This is meant to be called in { RenderLevelLastEvent}. This will move the pose stack to the
+     * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
+     * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
+     */
+    public static void loadProjection(PoseStack poseStack, double x, double y, double z) {
+        Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        poseStack.translate(x - projection.x, y - projection.y, z - projection.z);
     }
 }

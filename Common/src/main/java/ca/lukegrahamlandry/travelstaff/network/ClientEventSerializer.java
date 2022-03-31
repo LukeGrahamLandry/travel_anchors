@@ -1,22 +1,13 @@
 package ca.lukegrahamlandry.travelstaff.network;
 
-import io.github.noeppi_noeppi.libx.network.PacketSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class ClientEventSerializer implements PacketSerializer<ClientEventSerializer.ClientEvent> {
-
-    @Override
-    public Class<ClientEvent> messageClass() {
-        return ClientEvent.class;
-    }
-
-    @Override
-    public void encode(ClientEvent msg, FriendlyByteBuf buffer) {
+public class ClientEventSerializer{
+    public static void encode(ClientEvent msg, FriendlyByteBuf buffer) {
         buffer.writeUtf(msg.name());
     }
 
-    @Override
-    public ClientEvent decode(FriendlyByteBuf buffer) {
+    public static ClientEvent decode(FriendlyByteBuf buffer) {
         return ClientEvent.valueOf(buffer.readUtf(32767));
     }
 

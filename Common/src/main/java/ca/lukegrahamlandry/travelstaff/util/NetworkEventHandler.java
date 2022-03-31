@@ -10,10 +10,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import java.util.function.Supplier;
-
 public class NetworkEventHandler {
     public static void handleClientUpdateAnchorList(CompoundTag nbt){
+        if (Minecraft.getInstance().level == null) return;
+
         TravelAnchorList.get(Minecraft.getInstance().level).load(nbt);
     }
 
@@ -62,4 +62,22 @@ public class NetworkEventHandler {
                 break;
         }
     }
+
+    public static void handleSyncAnchorTile(CompoundTag nbt, BlockPos pos) {
+        if (Minecraft.getInstance().level == null) return;
+
+        if (Minecraft.getInstance().level.hasChunkAt(pos)) {
+            BlockEntity be = Minecraft.getInstance().level.getBlockEntity(pos);
+            if (be instanceof TileTravelAnchor) {
+                ((TileTravelAnchor) be).setName(nbt.getString("travel_anchor_name"));
+                ((TileTravelAnchor) be).readMimic(nbt);
+            }
+        }
+    }
+
+
+    // player changes a name on client
+    // client -> server handleNameChange
+    // then server sends it to all clients
+    // server -> client handleSyncAnchorTile
 }
