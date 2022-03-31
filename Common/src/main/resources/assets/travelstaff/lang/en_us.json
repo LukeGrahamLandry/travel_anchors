@@ -1,7 +1,7 @@
 {
   "itemGroup.travelstaff": "Travel Anchors",
 
-  "item.travelstaff.travel_staff": "Travel Staff",
+  "item.travelstaff.travel_staff": "Staff of Travelling",
 
   "enchantment.travelstaff.range": "Range",
   "enchantment.travelstaff.teleportation": "Teleportation",
@@ -12,7 +12,7 @@
   "screen.travelstaff.search": "Search",
   "screen.travelstaff.nameless": "Enter a name to use it",
 
-  "tooltip.travelstaff.travel_anchor_block": "Look at this with a Travel Staff, or Teleportation enchantment to teleport.",
+  "tooltip.travelstaff.travel_anchor_block": "Look at this with a Staff of Travelling, or Teleportation enchantment to teleport.",
   "tooltip.travelstaff.travel_staff": "Sneak + Right-Click to short range Teleport. Look at Travel Anchor to warp.",
 
   "travelstaff.tp.success": "Teleported to %s.",

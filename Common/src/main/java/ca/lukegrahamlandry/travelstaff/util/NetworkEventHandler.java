@@ -29,7 +29,7 @@ public class NetworkEventHandler {
         }
     }
     public static void handleClientEvent(ServerPlayer player, ClientEventSerializer.ClientEvent msg) {
-        if (player != null) return;
+        if (player == null) return;
 
         switch (msg) {
             case JUMP:
@@ -56,8 +56,9 @@ public class NetworkEventHandler {
 
             case JUMP_TP:
                 // Client has configured to use jump as telport not elevate
-                if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
-                    TeleportHandler.anchorTeleport(player.getCommandSenderWorld(), player, player.blockPosition().immutable().below(), null);
+                System.out.println("no staff tele try "  + TeleportHandler.canBlockTeleport(player));
+                if (TeleportHandler.canBlockTeleport(player)) {
+                    TeleportHandler.anchorTeleport(player.getLevel(), player, TeleportHandler.down(player), null);
                 }
                 break;
         }

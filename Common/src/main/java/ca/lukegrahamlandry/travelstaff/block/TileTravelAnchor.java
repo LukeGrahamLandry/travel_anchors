@@ -15,11 +15,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class TileTravelAnchor extends BlockEntity {
-    
-    private String name = "";
     private BlockState mimic = null;
+    String name = "";
 
     public TileTravelAnchor(BlockPos pos, BlockState state) {
         super(Registry.BLOCK_ENTITY_TYPE.get(Constants.TRAVEL_ANCHOR_KEY), pos, state);

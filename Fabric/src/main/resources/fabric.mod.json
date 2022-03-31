@@ -15,16 +15,21 @@
     },
   
     "license": "Apache 2.0",
-    "icon": "assets/modid/icon.png",
+    "icon": "assets/travelstaff/textures/item/travel_staff.png",
   
     "environment": "*",
     "entrypoints": {
       "main": [
         "ca.lukegrahamlandry.travelstaff.FabricModMain"
+      ],
+      "client": [
+        {
+          "value": "ca.lukegrahamlandry.travelstaff.FabricModClient"
+        }
       ]
     },
     "mixins": [
-      "modid.mixins.json"
+      "travelstaff.mixins.json"
     ],
   
     "depends": {

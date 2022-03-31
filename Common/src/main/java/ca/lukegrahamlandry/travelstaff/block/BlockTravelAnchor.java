@@ -2,6 +2,8 @@ package ca.lukegrahamlandry.travelstaff.block;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
+import ca.lukegrahamlandry.travelstaff.platform.Services;
+import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -35,6 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 
 public class BlockTravelAnchor extends Block implements EntityBlock {
@@ -60,7 +63,22 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
         BlockEntityRenderers.register(ModComponents.travelAnchor.getBlockEntityType(), dispatcher -> new RenderTravelAnchor());
     }
      */
-    
+
+    static Random rand = new Random();
+    @Override
+    public void onPlace(BlockState $$0, Level level, BlockPos pos, BlockState $$3, boolean $$4) {
+        super.onPlace($$0, level, pos, $$3, $$4);
+        if (!level.isClientSide()){
+            BlockEntity tile = level.getBlockEntity(pos);
+            if (tile instanceof TileTravelAnchor) {
+                if (((TileTravelAnchor) tile).getName().isEmpty()){
+                    ((TileTravelAnchor) tile).setName("newAnchor" + rand.nextInt(10000));
+                    tile.setChanged();
+                }
+            }
+        }
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public int getLightBlock(@Nonnull BlockState state, BlockGetter level, @Nonnull BlockPos pos) {
@@ -81,7 +99,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
         BlockEntity tile = level.getBlockEntity(pos);
         if (tile instanceof TileTravelAnchor) {
             BlockState mimic = ((TileTravelAnchor) tile).getMimic();
-            if (mimic != null) {
+            if (mimic != null && !mimic.is(Constants.getTravelAnchor())) {
                 return mimic.getShape(level, pos, context);
             }
         }
@@ -111,8 +129,12 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
     @Override
     public InteractionResult use(@Nonnull BlockState state, Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         if (!level.isClientSide) {
+            if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemTravelStaff && TeleportHandler.anchorTeleport(level, player, player.blockPosition().immutable().below(), hand)) {
+                return InteractionResult.SUCCESS;
+            }
+
             ItemStack item = player.getItemInHand(InteractionHand.OFF_HAND);
-            if (!item.isEmpty() && item.getItem() instanceof BlockItem && player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+            if (!item.isEmpty() && item.getItem() instanceof BlockItem && player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && hand == InteractionHand.MAIN_HAND) {
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be instanceof TileTravelAnchor) {
                     BlockState mimicState = ((BlockItem) item.getItem()).getBlock().getStateForPlacement(new BlockPlaceContext(player, InteractionHand.OFF_HAND, item, hit));
@@ -126,7 +148,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
             }
             super.use(state, level, pos, player, hand, hit);
         } else {
-            if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof BlockItem)){
+            if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemTravelStaff) && (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof BlockItem))){
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be instanceof TileTravelAnchor && !(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemTravelStaff)) {
                     String name = ((TileTravelAnchor) be).getName();

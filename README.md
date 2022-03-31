@@ -6,10 +6,8 @@ This project uses multiloader to build the mod for both Forge and Fabric from th
 Ported from https://www.curseforge.com/minecraft/mc-mods/travel-anchors
 
 
-
-
 TODO
-- register objects
 - fabric events
 - fabric packets  
 - config
+- help gui button 

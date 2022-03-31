@@ -45,9 +45,11 @@ public class NetworkInit {
 
 
         INSTANCE.registerMessage(nextID(), ClientEventSerializer.ClientEvent.class, ClientEventSerializer::encode, ClientEventSerializer::decode, (msg, ctx) -> {
+            System.out.println("ClientEvent packet");
             ServerPlayer player = ctx.get().getSender();
             ctx.get().enqueueWork(() -> {
                 if (player != null) {
+                    System.out.println("handle ClientEvent packet" + msg.name());
                     NetworkEventHandler.handleClientEvent(player, ClientEventSerializer.ClientEvent.valueOf(msg.name()));
                 }
             });

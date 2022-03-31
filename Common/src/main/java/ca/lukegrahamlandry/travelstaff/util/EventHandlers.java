@@ -16,7 +16,7 @@ public class EventHandlers {
         if (TeleportHandler.canPlayerTeleport(player, hand) && !stack.isEmpty()) {
             if (player.isShiftKeyDown() && TeleportHandler.canItemTeleport(player, hand)) {
                 if (TeleportHandler.shortTeleport(level, player, hand)) {
-                    player.getCooldowns().addCooldown(stack.getItem(), 30);
+                    player.getCooldowns().addCooldown(stack.getItem(), Services.CONFIG.getStaffCooldown());
                     return InteractionResult.SUCCESS;
                 }
             } else {
@@ -53,25 +53,28 @@ public class EventHandlers {
     }
 
     public static void onJump(Player player) {
-        System.out.println("jump");
-        if (Services.CONFIG.disableElevation()) {
+        if (Services.CONFIG.isElevatorMode()) {
+            if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
+                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP);
+            }
+
+        } else {
             if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
                 Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP_TP);
-                System.out.println("1");
-            }
-        } else {
-            if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
-                System.out.println("2");
-                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP);
             }
         }
     }
 
     public static void onSneak() {
-        if (Minecraft.getInstance().player != null && Minecraft.getInstance().options.keyShift.consumeClick()) {
-            if (!Services.CONFIG.disableElevation()) {
+        Player player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (Services.CONFIG.isElevatorMode()) {
                 if (TeleportHandler.canElevate(Minecraft.getInstance().player)) {
                     Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.SNEAK);
+                }
+            } else {
+                if (TeleportHandler.canBlockTeleport(player)) {
+                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP_TP);
                 }
             }
         }

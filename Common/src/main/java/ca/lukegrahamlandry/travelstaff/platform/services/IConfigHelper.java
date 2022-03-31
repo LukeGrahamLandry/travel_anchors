@@ -12,11 +12,20 @@ public interface IConfigHelper {
     }
 
     /*
-    "When this is set, wou won't be able to use the elevation feature of travel anchors",
-            "but you'll teleport to the anchor you're looking at when jumping on another travel anchor",
+    "When this is set, you will be able to use the elevation feature of travel anchors",
+            "but you'll wont teleport to the anchor you're looking at when jumping on another travel anchor",
             "This is a client option so each player can adjust it as they prefer."
      */
-    default boolean disableElevation(){
-        return true;
+    default boolean isElevatorMode(){
+        return false;
+    }
+
+    // when not using travel anchors the staff has a cooldown
+    default int getStaffCooldown(){
+        return 20;
+    }
+
+    default double getShortTeleportDistance(){
+        return 7;
     }
 }

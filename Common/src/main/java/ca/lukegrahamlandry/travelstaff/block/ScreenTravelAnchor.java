@@ -14,17 +14,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ScreenTravelAnchor extends Screen {
-    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/travel_anchor.png");
     private final String name;
     private final BlockPos pos;
     private EditBox textFieldWidget;
-    private int imageWidth = 180;
-    private int imageHeight = 50;
 
     public ScreenTravelAnchor(String name, BlockPos pos) {
         super(new TextComponent(name));
@@ -40,7 +38,14 @@ public class ScreenTravelAnchor extends Screen {
         this.textFieldWidget.setMaxLength(32767);
         this.textFieldWidget.changeFocus(true);
         this.textFieldWidget.setValue(name);
+        textFieldWidget.setHighlightPos(0);
     }
+
+    // todo: bring back background and have a help menu that sends you to wiki page
+    /*
+    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/travel_anchor.png");
+    private int imageWidth = 180;
+    private int imageHeight = 50;
 
     protected void renderBg(@Nonnull PoseStack poseStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -49,7 +54,7 @@ public class ScreenTravelAnchor extends Screen {
         this.blit(poseStack, (int) (this.width - this.imageWidth) / 2, (int) (this.height - this.imageHeight) / 2, 0, 0, this.imageWidth, this.imageHeight);
     }
 
-    /*
+
     protected void renderLabels(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
         String title = this.title.getString();
         this.font.draw(poseStack, title, (float) (this.imageWidth / 2 - this.font.width(title) / 2), 6.0F, 0x404040);
@@ -85,6 +90,10 @@ public class ScreenTravelAnchor extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         InputConstants.Key mapping = InputConstants.getKey(keyCode, scanCode);
+        if (keyCode == GLFW.GLFW_KEY_ENTER){
+            this.onClose();
+            return true;
+        }
         //noinspection ConstantConditions
         /*
         if (keyCode != 256 && (this.minecraft.options.keyInventory.isActiveAndMatches(mapping)

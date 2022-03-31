@@ -11,8 +11,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class FabricRegistry {
+    public static BlockEntityType<TileTravelAnchor> ANCHOR_TILE;
+
     public static void init(){
         Registry.register(Registry.ITEM, Constants.TELEPORT_STAFF_KEY, new ItemTravelStaff(new Item.Properties()));
         Block anchor = new BlockTravelAnchor();
@@ -22,6 +25,7 @@ public class FabricRegistry {
         Registry.register(Registry.ENCHANTMENT, new ResourceLocation(Constants.MOD_ID, "range"), RangeEnchantment.INSTANCE);
         Registry.register(Registry.ENCHANTMENT, new ResourceLocation(Constants.MOD_ID, "teleportation"), TeleportationEnchantment.INSTANCE);
 
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, Constants.TRAVEL_ANCHOR_KEY, FabricBlockEntityTypeBuilder.create(TileTravelAnchor::new, anchor).build(null));
+        ANCHOR_TILE = FabricBlockEntityTypeBuilder.create(TileTravelAnchor::new, anchor).build(null);
+        Registry.register(Registry.BLOCK_ENTITY_TYPE, Constants.TRAVEL_ANCHOR_KEY, ANCHOR_TILE);
     }
 }

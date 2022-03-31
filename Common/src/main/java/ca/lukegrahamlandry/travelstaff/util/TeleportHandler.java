@@ -31,11 +31,13 @@ public class TeleportHandler {
 
     public static boolean anchorTeleport(Level level, Player player, @Nullable BlockPos except, @Nullable InteractionHand hand) {
         Pair<BlockPos, String> anchor = getAnchorToTeleport(level, player, except);
+        System.out.println("anchorTeleport try" + anchor);
         return teleportPlayer(player, anchor, hand);
     }
 
     public static Pair<BlockPos, String> getAnchorToTeleport(Level level, Player player, @Nullable BlockPos except) {
-        if (!player.isShiftKeyDown()) {
+        boolean allow = !player.isShiftKeyDown() || canBlockTeleport(player);
+        if (allow) {
             double maxDistance = getMaxDistance(player);
             Vec3 positionVec = player.position().add(0, player.getEyeHeight(), 0);
             Optional<Pair<BlockPos, String>> anchor = TravelAnchorList.get(level).getAnchorsAround(player.position(), Math.pow(maxDistance, 2))
@@ -82,7 +84,7 @@ public class TeleportHandler {
         Vec3 targetVec = player.position().add(0, player.getEyeHeight(), 0);
         Vec3 lookVec = player.getLookAngle();
         BlockPos target = null;
-        for (double i = 7; i >= 2; i -= 0.5) {
+        for (double i = Services.CONFIG.getShortTeleportDistance(); i >= 2; i -= 0.5) {
             Vec3 v3d = targetVec.add(lookVec.multiply(i, i, i));
             target = new BlockPos(Math.round(v3d.x), Math.round(v3d.y), Math.round(v3d.z));
             if (canTeleportTo(level, target.below())) { //to use the same check as the anchors use the position below
@@ -121,9 +123,12 @@ public class TeleportHandler {
         return canItemTeleport(player, hand) || canBlockTeleport(player);
     }
 
+    public static BlockPos down(Player player){
+        return new BlockPos(player.getBoundingBox().getCenter().x, player.getY(), player.getBoundingBox().getCenter().z).below();
+    }
+
     public static boolean canBlockTeleport(Player player) {
-        BlockPos check = player.getOnPos();
-        return (player.getLevel().getBlockState(check).getBlock() == Constants.getTravelAnchor() && !player.isShiftKeyDown());
+        return player.getLevel().getBlockState(down(player)).getBlock() == Constants.getTravelAnchor();// && !player.isShiftKeyDown();
     }
 
     public static boolean canItemTeleport(Player player, InteractionHand hand) {
@@ -145,7 +150,7 @@ public class TeleportHandler {
     }
     
     public static boolean canElevate(Player player) {
-        return player.getLevel().getBlockState(player.blockPosition().immutable().below()).getBlock() == Constants.getTravelAnchor();
+        return player.getLevel().getBlockState(down(player)).getBlock() == Constants.getTravelAnchor();
     }
     
     public static boolean elevateUp(Player player) {
