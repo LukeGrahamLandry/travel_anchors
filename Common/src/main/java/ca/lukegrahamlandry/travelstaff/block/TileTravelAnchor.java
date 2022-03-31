@@ -4,11 +4,15 @@ import ca.lukegrahamlandry.travelstaff.Constants;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
@@ -17,8 +21,8 @@ public class TileTravelAnchor extends BlockEntity {
     private String name = "";
     private BlockState mimic = null;
 
-    public TileTravelAnchor(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public TileTravelAnchor(BlockPos pos, BlockState state) {
+        super(Registry.BLOCK_ENTITY_TYPE.get(Constants.TRAVEL_ANCHOR_KEY), pos, state);
     }
 
     @Override
@@ -64,6 +68,11 @@ public class TileTravelAnchor extends BlockEntity {
     }
 
     public BlockState getMimic() {
+        if (this.mimic == null) {
+            // when you relog, the tile doesnt sync to the client but the list does so if the state is unset it might be set on the list
+            TravelAnchorList.Entry entry = TravelAnchorList.get(this.level).getEntry(this.worldPosition);
+            if (entry != null) this.mimic = entry.state;
+        }
         return this.mimic;
     }
 
@@ -80,8 +89,6 @@ public class TileTravelAnchor extends BlockEntity {
         super.setChanged();
         if (!this.level.isClientSide()) Services.NETWORK.syncAnchorToClients(this);
     }
-
-    // TODO: allow right click to set mimic state for what it renders as?
 
 //
 //    @Override

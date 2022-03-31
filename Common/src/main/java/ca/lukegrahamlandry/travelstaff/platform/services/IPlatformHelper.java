@@ -1,5 +1,10 @@
 package ca.lukegrahamlandry.travelstaff.platform.services;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.state.BlockState;
+
 public interface IPlatformHelper {
 
     /**
@@ -23,4 +28,10 @@ public interface IPlatformHelper {
      * @return True if in a development environment, false otherwise.
      */
     boolean isDevelopmentEnvironment();
+
+    void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean b, boolean b1, int i);
+
+    // does things that need the access transformers. because they have different systems that need thier magic gradle so i cant make the common code compile even though i know the things would be accessable under both modloaders
+    RenderType createLines(String name, int strength);
+    boolean accessSortOnUpload(RenderType parent);
 }

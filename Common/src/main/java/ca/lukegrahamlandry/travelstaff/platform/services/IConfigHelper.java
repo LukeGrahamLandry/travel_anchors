@@ -17,6 +17,6 @@ public interface IConfigHelper {
             "This is a client option so each player can adjust it as they prefer."
      */
     default boolean disableElevation(){
-        return false;
+        return true;
     }
 }

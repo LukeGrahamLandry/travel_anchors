@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "travel_anchors:item/travel_staff"
+    "layer0": "travelstaff:item/travel_staff"
   }
 }

@@ -1,8 +1,11 @@
 package ca.lukegrahamlandry.travelstaff.block;
 
+import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -18,27 +21,34 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BlockTravelAnchor extends Block {
+public class BlockTravelAnchor extends Block implements EntityBlock {
 
     private static final VoxelShape SHAPE = Shapes.box(0.01, 0.01, 0.01, 0.99, 0.99, 0.99);
 
-    public BlockTravelAnchor(Properties properties) {
-        super(properties);
+    public BlockTravelAnchor() {
+        super(BlockBehaviour.Properties.of(Material.METAL));
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return Registry.BLOCK_ENTITY_TYPE.get(Constants.TRAVEL_ANCHOR_KEY).create(pos, state);
     }
 
     /*
@@ -94,7 +104,7 @@ public class BlockTravelAnchor extends Block {
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, @Nonnull TooltipFlag flag) {
-        tooltip.add(new TranslatableComponent("tooltip.travel_anchors.travel_anchor_block"));
+        tooltip.add(new TranslatableComponent("tooltip.travelstaff.travel_anchor_block"));
     }
 
     @Nonnull
@@ -118,8 +128,16 @@ public class BlockTravelAnchor extends Block {
         } else {
             if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof BlockItem)){
                 BlockEntity be = level.getBlockEntity(pos);
-                if (be instanceof TileTravelAnchor) {
-                    openGui(((TileTravelAnchor) be).getName(), pos);
+                if (be instanceof TileTravelAnchor && !(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemTravelStaff)) {
+                    String name = ((TileTravelAnchor) be).getName();
+
+                    // when you relog it doesnt sync the actual tile so do this.
+                    if (name.isEmpty()){
+                        name = TravelAnchorList.get(level).getAnchor(pos);
+                        if (name == null) name = "";
+                    }
+
+                    openGui(name, pos);
                 }
             }
         }
@@ -127,7 +145,6 @@ public class BlockTravelAnchor extends Block {
         return InteractionResult.SUCCESS;
     }
 
-    @OnlyIn(Dist.CLIENT)
     private void openGui(String name, BlockPos pos) {
         Minecraft.getInstance().setScreen(new ScreenTravelAnchor(name, pos));
     }

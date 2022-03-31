@@ -67,12 +67,12 @@ public class TeleportHandler {
             }
             player.playNotifySound(SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1F, 1F);
             if (!player.level.isClientSide) {
-                player.displayClientMessage(new TranslatableComponent("travel_anchors.tp.success", anchor.getRight()), true);
+                player.displayClientMessage(new TranslatableComponent("travelstaff.tp.success", anchor.getRight()), true);
             }
             return true;
         } else {
             if (!player.level.isClientSide) {
-                player.displayClientMessage(new TranslatableComponent("travel_anchors.tp.fail"), true);
+                player.displayClientMessage(new TranslatableComponent("travelstaff.tp.fail"), true);
             }
             return false;
         }
@@ -105,7 +105,7 @@ public class TeleportHandler {
             return true;
         } else {
             if (!player.level.isClientSide) {
-                player.displayClientMessage(new TranslatableComponent("travel_anchors.hop.fail"), true);
+                player.displayClientMessage(new TranslatableComponent("travelstaff.hop.fail"), true);
             }
             return false;
         }
@@ -122,8 +122,8 @@ public class TeleportHandler {
     }
 
     public static boolean canBlockTeleport(Player player) {
-        return (player.getLevel().getBlockState(player.blockPosition().immutable().below()).getBlock() == Constants.getTravelAnchor()
-                && !player.isShiftKeyDown());
+        BlockPos check = player.getOnPos();
+        return (player.getLevel().getBlockState(check).getBlock() == Constants.getTravelAnchor() && !player.isShiftKeyDown());
     }
 
     public static boolean canItemTeleport(Player player, InteractionHand hand) {

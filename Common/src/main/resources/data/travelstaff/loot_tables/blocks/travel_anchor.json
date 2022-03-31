@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "travel_anchors:travel_anchor"
+          "name": "travelstaff:travel_anchor"
         }
       ],
       "conditions": [

@@ -8,8 +8,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EventHandlers {
     // not in use on item because has to check for teleport enchant as well
@@ -54,20 +52,21 @@ public class EventHandlers {
         return InteractionResult.PASS;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static void onJump(Player player) {
+        System.out.println("jump");
         if (Services.CONFIG.disableElevation()) {
             if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
                 Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP_TP);
+                System.out.println("1");
             }
         } else {
             if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
+                System.out.println("2");
                 Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP);
             }
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static void onSneak() {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().options.keyShift.consumeClick()) {
             if (!Services.CONFIG.disableElevation()) {

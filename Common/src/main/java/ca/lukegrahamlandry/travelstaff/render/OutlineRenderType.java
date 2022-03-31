@@ -1,5 +1,6 @@
 package ca.lukegrahamlandry.travelstaff.render;
 
+import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 
@@ -8,16 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OutlineRenderType extends RenderType {
-
     private static final Map<RenderType, OutlineRenderType> TYPES = new HashMap<>();
 
     private final RenderType parent;
 
     // errors fixed with access transformers
     private OutlineRenderType(RenderType parent) {
-        super("Outline" + parent.name, parent.format(), parent.mode(), parent.bufferSize(), parent.affectsCrumbling(), parent.sortOnUpload, parent::setupRenderState, parent::clearRenderState);
+        super("Outline" + parent.toString(), parent.format(), parent.mode(), parent.bufferSize(), parent.affectsCrumbling(), Services.PLATFORM.accessSortOnUpload(parent), parent::setupRenderState, parent::clearRenderState);
         this.parent = parent;
     }
+
     
     @Nonnull
     @Override

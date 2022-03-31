@@ -14,7 +14,7 @@ public class Constants {
 	public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
 
 
-	public static ResourceLocation TELEPORT_STAFF_KEY = new ResourceLocation(MOD_ID, "teleport_staff");
+	public static ResourceLocation TELEPORT_STAFF_KEY = new ResourceLocation(MOD_ID, "travel_staff");
 	public static ResourceLocation TRAVEL_ANCHOR_KEY = new ResourceLocation(MOD_ID, "travel_anchor");
 
 	public static Block getTravelAnchor(){

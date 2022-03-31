@@ -36,7 +36,7 @@ public class ScreenTravelAnchor extends Screen {
     public void init() {
         super.init();
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
-        this.textFieldWidget = new EditBox(this.font, this.width / 2 - 50, this.height / 2 - 63, 100, 15, new TranslatableComponent("screen.travel_anchors.search"));
+        this.textFieldWidget = new EditBox(this.font, this.width / 2 - 50, this.height / 2 - 63, 100, 15, new TranslatableComponent("screen.travelstaff.search"));
         this.textFieldWidget.setMaxLength(32767);
         this.textFieldWidget.changeFocus(true);
         this.textFieldWidget.setValue(name);
@@ -54,7 +54,7 @@ public class ScreenTravelAnchor extends Screen {
         String title = this.title.getString();
         this.font.draw(poseStack, title, (float) (this.imageWidth / 2 - this.font.width(title) / 2), 6.0F, 0x404040);
         boolean empty = this.textFieldWidget.getValue().trim().isEmpty();
-        this.font.draw(poseStack, empty ? I18n.get("screen.travel_anchors.nameless") : this.name, 8, (float) (this.imageHeight - 126), empty ? 0xB31616 : 0x404040);
+        this.font.draw(poseStack, empty ? I18n.get("screen.travelstaff.nameless") : this.name, 8, (float) (this.imageHeight - 126), empty ? 0xB31616 : 0x404040);
     }
 
      */

@@ -22,7 +22,7 @@ public class ItemTravelStaff extends Item {
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, List<Component> tooltip, @Nonnull TooltipFlag flag) {
-        tooltip.add(new TranslatableComponent("tooltip.travel_anchors.travel_staff").withStyle(ChatFormatting.GOLD));
+        tooltip.add(new TranslatableComponent("tooltip.travelstaff.travel_staff").withStyle(ChatFormatting.GOLD));
     }
 
     @Override

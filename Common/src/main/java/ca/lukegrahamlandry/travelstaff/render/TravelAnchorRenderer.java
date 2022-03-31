@@ -1,19 +1,21 @@
 package ca.lukegrahamlandry.travelstaff.render;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.platform.Services;
 import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -27,30 +29,12 @@ import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
-import java.util.OptionalDouble;
 
 public class TravelAnchorRenderer {
+    public static final RenderType BOLD_LINES = Services.PLATFORM.createLines("bold_lines", 3);
+    public static final RenderType VERLY_BOLD_LINES = Services.PLATFORM.createLines("very_bold_lines", 5);
 
-    public static final RenderType BOLD_LINES = createLines("bold_lines", 3);
-    public static final RenderType VERLY_BOLD_LINES = createLines("very_bold_lines", 5);
-
-    // errors fixed by access transformers
-    private static RenderType createLines(String name, int strength) {
-        return RenderType.create(TravelAnchors.getInstance().modid + "_" + name,
-                DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 256, false, false,
-                RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER)
-                        .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(strength)))
-                        .setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING)
-                        .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                        .setOutputState(RenderStateShard.ITEM_ENTITY_TARGET)
-                        .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
-                        .setCullState(RenderStateShard.NO_CULL)
-                        .createCompositeState(false)
-        );
-    }
-    
-    @Model("block/travel_anchor")
-    public static BakedModel MODEL = null;
+    public static BakedModel MODEL = Minecraft.getInstance().getBlockRenderer().getBlockModel(Constants.getTravelAnchor().defaultBlockState());
 
     public static void renderAnchors(PoseStack poseStack, float partialTick) {
         ClientLevel level = Minecraft.getInstance().level;

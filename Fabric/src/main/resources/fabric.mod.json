@@ -11,7 +11,7 @@
     ],
     "contact": {
       "homepage": "https://moddingtutorials.org/commissions",
-      "sources": "https://github.com/LukeGrahamLandryMC/travel_anchors"
+      "sources": "https://github.com/LukeGrahamLandryMC/travelstaff"
     },
   
     "license": "Apache 2.0",
@@ -20,7 +20,7 @@
     "environment": "*",
     "entrypoints": {
       "main": [
-        "ca.lukegrahamlandry.travelstaff.ExampleMod"
+        "ca.lukegrahamlandry.travelstaff.FabricModMain"
       ]
     },
     "mixins": [
@@ -35,6 +35,8 @@
     },
     "suggests": {
       "another-mod": "*"
-    }
-  }
+    },
+
+  "accessWidener" : "travelstaff.accesswidener"
+}
   
