@@ -29,12 +29,12 @@ displayName="Staff of Travelling" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="multiloader.png" #optional
 # A text field displayed in the mod UI
-credits="ported from Travel Anchors by CastCrafter" #optional
+credits="CastCrafter, MelanX, noeppinoeppi" #optional
 # A text field displayed in the mod UI
 authors="LukeGrahamLandry#6888" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-This Mod brings Travel Anchors from EnderIO into a standalone mod.
+Brings the Travel Anchors from EnderIO into a standalone mod.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.multiloader]] #optional

@@ -1,6 +1,6 @@
 package ca.lukegrahamlandry.travelstaff.platform;
 
-import ca.lukegrahamlandry.travelstaff.NetworkInit;
+import ca.lukegrahamlandry.travelstaff.ForgeNetworkHandler;
 import ca.lukegrahamlandry.travelstaff.block.TileTravelAnchor;
 import ca.lukegrahamlandry.travelstaff.network.AnchorListUpdateSerializer;
 import ca.lukegrahamlandry.travelstaff.network.AnchorNameChangeSerializer;
@@ -15,12 +15,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
 
 public class ForgeNetworkHelper implements INetworkHelper {
-    public static ForgeNetworkHelper INSTANCE = new ForgeNetworkHelper();
-
-
     @Override
     public void sendNameChangeToServer(String name, BlockPos pos) {
-        NetworkInit.INSTANCE.sendToServer(new AnchorNameChangeSerializer.AnchorNameChangeMessage(pos, name));
+        ForgeNetworkHandler.INSTANCE.sendToServer(new AnchorNameChangeSerializer.AnchorNameChangeMessage(pos, name));
     }
 
     @Override
@@ -29,7 +26,7 @@ public class ForgeNetworkHelper implements INetworkHelper {
 
         CompoundTag tag = new CompoundTag();
         tile.saveAdditional(tag);
-        NetworkInit.INSTANCE.send(PacketDistributor.DIMENSION.with(tile.getLevel()::dimension), new SyncAnchorTileSerializer.AnchorTileMessage(tag, tile.getBlockPos()));
+        ForgeNetworkHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(tile.getLevel()::dimension), new SyncAnchorTileSerializer.AnchorTileMessage(tag, tile.getBlockPos()));
     }
 
     @Override
@@ -37,16 +34,16 @@ public class ForgeNetworkHelper implements INetworkHelper {
         if (list == null) {
             list = TravelAnchorList.get(level);
         }
-        NetworkInit.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new AnchorListUpdateSerializer.AnchorListUpdateMessage(list.save(new CompoundTag())));
+        ForgeNetworkHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new AnchorListUpdateSerializer.AnchorListUpdateMessage(list.save(new CompoundTag())));
     }
 
     @Override
-    public void sendAnchorListToClients(ServerPlayer player) {
-        NetworkInit.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new AnchorListUpdateSerializer.AnchorListUpdateMessage(TravelAnchorList.get(player.getCommandSenderWorld()).save(new CompoundTag())));
+    public void sendAnchorListToClient(ServerPlayer player) {
+        ForgeNetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new AnchorListUpdateSerializer.AnchorListUpdateMessage(TravelAnchorList.get(player.getCommandSenderWorld()).save(new CompoundTag())));
     }
 
     @Override
     public void sendClientEventToServer(ClientEventSerializer.ClientEvent event) {
-        NetworkInit.INSTANCE.sendToServer(event);
+        ForgeNetworkHandler.INSTANCE.sendToServer(event);
     }
 }

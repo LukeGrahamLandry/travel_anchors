@@ -4,14 +4,16 @@
     "version": "${version}",
   
     "name": "Staff of Travelling",
-    "description": "This is an example description! Tell everyone what your mod is about!",
+    "description": "Brings the Travel Anchors from EnderIO into a standalone mod.",
     "authors": [
       "LukeGrahamLandry#6888",
-      "CastCrafter"
+      "CastCrafter",
+      "MelanX",
+      "noeppinoeppi"
     ],
     "contact": {
       "homepage": "https://moddingtutorials.org/commissions",
-      "sources": "https://github.com/LukeGrahamLandryMC/travelstaff"
+      "sources": "https://github.com/LukeGrahamLandryMC/travel_anchors"
     },
   
     "license": "Apache 2.0",
@@ -38,10 +40,6 @@
       "minecraft": "1.18.x",
       "java": ">=17"
     },
-    "suggests": {
-      "another-mod": "*"
-    },
-
   "accessWidener" : "travelstaff.accesswidener"
 }
   

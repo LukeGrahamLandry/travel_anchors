@@ -17,7 +17,7 @@ public interface IConfigHelper {
             "This is a client option so each player can adjust it as they prefer."
      */
     default boolean isElevatorMode(){
-        return false;
+        return true;
     }
 
     // when not using travel anchors the staff has a cooldown

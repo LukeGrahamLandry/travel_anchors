@@ -1,6 +1,5 @@
 package ca.lukegrahamlandry.travelstaff.enchantments;
 
-import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;

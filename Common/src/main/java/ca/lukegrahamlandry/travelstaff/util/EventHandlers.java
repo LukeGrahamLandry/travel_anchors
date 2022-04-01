@@ -37,14 +37,21 @@ public class EventHandlers {
         return InteractionResult.PASS;
     }
 
-    public static InteractionResult emptyBlockClick(Player player, InteractionHand hand, ItemStack stack) {
+    public static InteractionResult onEmptyBlockClick(Player player, InteractionHand hand, ItemStack stack) {
         if (hand == InteractionHand.MAIN_HAND) {
             // Empty offhand does not count. In that case the main hand will either produce
             // this event or PlayerInteractEvent.RightClickItem
             if (TeleportHandler.canPlayerTeleport(player, hand)) {
                 if (!player.isShiftKeyDown()) {
-                    if (TeleportHandler.anchorTeleport(player.level, player, player.blockPosition().immutable().below(), hand)) {
-                        return InteractionResult.SUCCESS;
+                    if (player.level.isClientSide()){
+                        // fabric
+                        Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.EMPTY_HAND_INTERACT);
+                        return InteractionResult.FAIL; // stops the block from processing the interaction
+                    } else {
+                        // forge
+                        if (TeleportHandler.anchorTeleport(player.level, player, TeleportHandler.down(player), hand)) {
+                            return InteractionResult.FAIL; // stops the block from processing the interaction
+                        }
                     }
                 }
             }
@@ -55,12 +62,12 @@ public class EventHandlers {
     public static void onJump(Player player) {
         if (Services.CONFIG.isElevatorMode()) {
             if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
-                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP);
+                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_UP);
             }
 
         } else {
             if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
-                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP_TP);
+                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ANCHOR_TP);
             }
         }
     }
@@ -70,11 +77,11 @@ public class EventHandlers {
         if (player != null) {
             if (Services.CONFIG.isElevatorMode()) {
                 if (TeleportHandler.canElevate(Minecraft.getInstance().player)) {
-                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.SNEAK);
+                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_DOWN);
                 }
             } else {
                 if (TeleportHandler.canBlockTeleport(player)) {
-                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.JUMP_TP);
+                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ANCHOR_TP);
                 }
             }
         }

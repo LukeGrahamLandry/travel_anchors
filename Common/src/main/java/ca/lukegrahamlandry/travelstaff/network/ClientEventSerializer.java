@@ -12,9 +12,9 @@ public class ClientEventSerializer{
     }
 
     public enum ClientEvent {
-        JUMP,
+        ELEVATOR_UP,
         EMPTY_HAND_INTERACT,
-        SNEAK,
-        JUMP_TP
+        ELEVATOR_DOWN,
+        ANCHOR_TP
     }
 }

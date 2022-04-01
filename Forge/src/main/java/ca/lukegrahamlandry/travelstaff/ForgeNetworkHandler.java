@@ -13,7 +13,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.Optional;
 
-public class NetworkInit {
+public class ForgeNetworkHandler {
     public static SimpleChannel INSTANCE;
     private static int ID = 0;
 
@@ -45,12 +45,10 @@ public class NetworkInit {
 
 
         INSTANCE.registerMessage(nextID(), ClientEventSerializer.ClientEvent.class, ClientEventSerializer::encode, ClientEventSerializer::decode, (msg, ctx) -> {
-            System.out.println("ClientEvent packet");
             ServerPlayer player = ctx.get().getSender();
             ctx.get().enqueueWork(() -> {
                 if (player != null) {
-                    System.out.println("handle ClientEvent packet" + msg.name());
-                    NetworkEventHandler.handleClientEvent(player, ClientEventSerializer.ClientEvent.valueOf(msg.name()));
+                    NetworkEventHandler.handleClientEvent(player, msg);
                 }
             });
             ctx.get().setPacketHandled(true);

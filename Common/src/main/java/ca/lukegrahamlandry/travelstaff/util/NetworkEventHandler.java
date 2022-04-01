@@ -32,7 +32,7 @@ public class NetworkEventHandler {
         if (player == null) return;
 
         switch (msg) {
-            case JUMP:
+            case ELEVATOR_UP:
                 if (TeleportHandler.canElevate(player)) {
                     if (TeleportHandler.elevateUp(player)) {
                         player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
@@ -42,11 +42,11 @@ public class NetworkEventHandler {
 
             case EMPTY_HAND_INTERACT:
                 if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
-                    TeleportHandler.anchorTeleport(player.getCommandSenderWorld(), player, player.blockPosition().immutable().below(), InteractionHand.MAIN_HAND);
+                    TeleportHandler.anchorTeleport(player.getCommandSenderWorld(), player, TeleportHandler.down(player), InteractionHand.MAIN_HAND);
                 }
                 break;
 
-            case SNEAK:
+            case ELEVATOR_DOWN:
                 if (TeleportHandler.canElevate(player)) {
                     if (TeleportHandler.elevateDown(player)) {
                         player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
@@ -54,9 +54,8 @@ public class NetworkEventHandler {
                 }
                 break;
 
-            case JUMP_TP:
+            case ANCHOR_TP:
                 // Client has configured to use jump as telport not elevate
-                System.out.println("no staff tele try "  + TeleportHandler.canBlockTeleport(player));
                 if (TeleportHandler.canBlockTeleport(player)) {
                     TeleportHandler.anchorTeleport(player.getLevel(), player, TeleportHandler.down(player), null);
                 }

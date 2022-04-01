@@ -9,7 +9,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 

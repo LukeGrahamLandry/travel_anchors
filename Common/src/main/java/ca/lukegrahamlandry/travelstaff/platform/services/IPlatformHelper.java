@@ -29,7 +29,7 @@ public interface IPlatformHelper {
      */
     boolean isDevelopmentEnvironment();
 
-    void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean b, boolean b1, int i);
+    void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean glow, boolean active, int distanceSq);
 
     // does things that need the access transformers. because they have different systems that need thier magic gradle so i cant make the common code compile even though i know the things would be accessable under both modloaders
     RenderType createLines(String name, int strength);

@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,7 +20,7 @@ public class FabricRegistry {
     public static void init(){
         Registry.register(Registry.ITEM, Constants.TELEPORT_STAFF_KEY, new ItemTravelStaff(new Item.Properties()));
         Block anchor = new BlockTravelAnchor();
-        Registry.register(Registry.ITEM, Constants.TRAVEL_ANCHOR_KEY, new BlockItem(anchor, new Item.Properties()));
+        Registry.register(Registry.ITEM, Constants.TRAVEL_ANCHOR_KEY, new BlockItem(anchor, new Item.Properties().tab(CreativeModeTab.TAB_TRANSPORTATION)));
         Registry.register(Registry.BLOCK, Constants.TRAVEL_ANCHOR_KEY, anchor);
 
         Registry.register(Registry.ENCHANTMENT, new ResourceLocation(Constants.MOD_ID, "range"), RangeEnchantment.INSTANCE);

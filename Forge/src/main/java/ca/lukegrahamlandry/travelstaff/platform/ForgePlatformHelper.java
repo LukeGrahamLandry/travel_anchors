@@ -16,10 +16,8 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import java.util.OptionalDouble;
 
 public class ForgePlatformHelper implements IPlatformHelper {
-
     @Override
     public String getPlatformName() {
-
         return "Forge";
     }
 
@@ -35,8 +33,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean b, boolean b1, int i) {
-        TravelAnchorRenderer.renderAnchor(matrixStack, buffer, null, mimic, combinedLight, b, b1, i);
+    public void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean glow, boolean active, int distanceSq) {
+        TravelAnchorRenderer.renderAnchor(matrixStack, buffer, null, mimic, combinedLight, glow, active, distanceSq);
     }
 
     @Override

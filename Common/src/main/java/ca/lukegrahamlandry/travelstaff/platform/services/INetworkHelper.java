@@ -14,7 +14,7 @@ public interface INetworkHelper {
 
     void sendAnchorListToClients(ServerLevel level, TravelAnchorList travelAnchorList);
 
-    void sendAnchorListToClients(ServerPlayer player);
+    void sendAnchorListToClient(ServerPlayer player);
 
     void sendClientEventToServer(ClientEventSerializer.ClientEvent event);
 }

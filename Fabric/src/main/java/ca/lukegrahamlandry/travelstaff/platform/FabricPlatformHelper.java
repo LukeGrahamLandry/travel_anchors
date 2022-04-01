@@ -34,8 +34,8 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean b, boolean b1, int i) {
-        TravelAnchorRenderer.renderAnchor(matrixStack, buffer, null, mimic, combinedLight, b, b1, i);
+    public void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean glow, boolean active, int distanceSq) {
+        TravelAnchorRenderer.renderAnchor(matrixStack, buffer, null, mimic, combinedLight, glow, active, distanceSq);
     }
 
     // errors fixed by access transformers

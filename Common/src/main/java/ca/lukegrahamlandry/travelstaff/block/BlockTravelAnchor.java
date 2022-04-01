@@ -2,7 +2,6 @@ package ca.lukegrahamlandry.travelstaff.block;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
-import ca.lukegrahamlandry.travelstaff.platform.Services;
 import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.client.Minecraft;
@@ -10,13 +9,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -38,14 +34,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class BlockTravelAnchor extends Block implements EntityBlock {
 
     private static final VoxelShape SHAPE = Shapes.box(0.01, 0.01, 0.01, 0.99, 0.99, 0.99);
 
     public BlockTravelAnchor() {
-        super(BlockBehaviour.Properties.of(Material.METAL));
+        super(BlockBehaviour.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(2.0F, 6.0F));
     }
 
     @Nullable
@@ -53,16 +48,6 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return Registry.BLOCK_ENTITY_TYPE.get(Constants.TRAVEL_ANCHOR_KEY).create(pos, state);
     }
-
-    /*
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
-        ItemBlockRenderTypes.setRenderLayer(ModComponents.travelAnchor, RenderType.cutoutMipped());
-        MenuScreens.register(ModComponents.travelAnchor.menu, ScreenTravelAnchor::new);
-        BlockEntityRenderers.register(ModComponents.travelAnchor.getBlockEntityType(), dispatcher -> new RenderTravelAnchor());
-    }
-     */
 
     static Random rand = new Random();
     @Override
@@ -72,7 +57,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
             BlockEntity tile = level.getBlockEntity(pos);
             if (tile instanceof TileTravelAnchor) {
                 if (((TileTravelAnchor) tile).getName().isEmpty()){
-                    ((TileTravelAnchor) tile).setName("newAnchor" + rand.nextInt(10000));
+                    ((TileTravelAnchor) tile).setName("untitled " + rand.nextInt(10000));
                     tile.setChanged();
                 }
             }
@@ -106,6 +91,19 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
         return Shapes.block();
     }
 
+    // since i cant access hasCollision directly to set based on mimic i must to this. because saplings getShape makes it think you can walk on them
+    @Override
+    public VoxelShape getCollisionShape(BlockState $$0, BlockGetter level, BlockPos pos, CollisionContext context) {
+        BlockEntity tile = level.getBlockEntity(pos);
+        if (tile instanceof TileTravelAnchor) {
+            BlockState mimic = ((TileTravelAnchor) tile).getMimic();
+            if (mimic != null && !mimic.is(Constants.getTravelAnchor())) {
+                return mimic.getCollisionShape(level, pos, context);
+            }
+        }
+        return super.getCollisionShape($$0, level, pos, context);
+    }
+
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
@@ -129,7 +127,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
     @Override
     public InteractionResult use(@Nonnull BlockState state, Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         if (!level.isClientSide) {
-            if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemTravelStaff && TeleportHandler.anchorTeleport(level, player, player.blockPosition().immutable().below(), hand)) {
+            if (TeleportHandler.canItemTeleport(player, hand) && TeleportHandler.anchorTeleport(level, player, player.blockPosition().immutable().below(), hand)) {
                 return InteractionResult.SUCCESS;
             }
 
@@ -148,7 +146,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
             }
             super.use(state, level, pos, player, hand, hit);
         } else {
-            if (!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemTravelStaff) && (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof BlockItem))){
+            if (!TeleportHandler.canItemTeleport(player, InteractionHand.MAIN_HAND) && (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || !(player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof BlockItem))){
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be instanceof TileTravelAnchor && !(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemTravelStaff)) {
                     String name = ((TileTravelAnchor) be).getName();

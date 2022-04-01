@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -31,7 +32,6 @@ public class TeleportHandler {
 
     public static boolean anchorTeleport(Level level, Player player, @Nullable BlockPos except, @Nullable InteractionHand hand) {
         Pair<BlockPos, String> anchor = getAnchorToTeleport(level, player, except);
-        System.out.println("anchorTeleport try" + anchor);
         return teleportPlayer(player, anchor, hand);
     }
 
@@ -114,9 +114,13 @@ public class TeleportHandler {
     }
 
     public static boolean canTeleportTo(BlockGetter level, BlockPos target) {
-        return !level.getBlockState(target.immutable().above(1)).canOcclude()
-                && !level.getBlockState(target.immutable().above(2)).canOcclude()
+        return !fullBlockAt(level, target.immutable().above(1))
+                && !fullBlockAt(level, target.immutable().above(2))
                 && target.getY() >= level.getMinBuildHeight();
+    }
+
+    private static boolean fullBlockAt(BlockGetter level, BlockPos target){
+        return Block.isShapeFullBlock(level.getBlockState(target).getShape(level, target));
     }
 
     public static boolean canPlayerTeleport(Player player, InteractionHand hand) {
