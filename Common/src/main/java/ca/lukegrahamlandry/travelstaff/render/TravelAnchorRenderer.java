@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.LightLayer;
@@ -87,7 +86,7 @@ public class TravelAnchorRenderer {
                                 if (blockScale < 0.1f) {
                                     blockScale = 0.1f;
                                 }
-                                blockScale = blockScale * (Math.sin(Math.toRadians(Minecraft.getInstance().options.fov / 4d)));
+                                blockScale = blockScale * (Math.sin(Math.toRadians(Minecraft.getInstance().options.fov().get() / 4d)));
                                 if (active) {
                                     blockScale *= 1.3;
                                 }
@@ -98,7 +97,7 @@ public class TravelAnchorRenderer {
                                 poseStack.translate(0, 5, 0);
 
                                 double doubleScale = 0.1;
-                                doubleScale = doubleScale * (Math.sin(Math.toRadians(Minecraft.getInstance().options.fov / 4d)));
+                                doubleScale = doubleScale * (Math.sin(Math.toRadians(Minecraft.getInstance().options.fov().get() / 4d)));
                                 if (active) {
                                     doubleScale *= 1.3;
                                 }
@@ -115,7 +114,7 @@ public class TravelAnchorRenderer {
                                 }
 
                                 Matrix4f matrix4f = poseStack.last().pose();
-                                Component tc = new TextComponent(entry.name.trim());
+                                Component tc = Component.literal(entry.name.trim());
 
                                 float textOpacitySetting = Minecraft.getInstance().options.getBackgroundOpacity(0.5f);
                                 int alpha = (int) (textOpacitySetting * 255) << 24;
@@ -162,7 +161,7 @@ public class TravelAnchorRenderer {
             if (doubleScale < 0.1f) {
                 doubleScale = 0.1f;
             }
-            doubleScale = doubleScale * (Math.sin(Math.toRadians(Minecraft.getInstance().options.fov / 4d)));
+            doubleScale = doubleScale * (Math.sin(Math.toRadians(Minecraft.getInstance().options.fov().get() / 4d)));
             if (active) {
                 doubleScale *= 1.3;
             }
@@ -179,7 +178,7 @@ public class TravelAnchorRenderer {
             }
 
             Matrix4f matrix4f = poseStack.last().pose();
-            Component tc = new TextComponent(name.trim());
+            Component tc = Component.literal(name.trim());
 
             float textOpacitySetting = Minecraft.getInstance().options.getBackgroundOpacity(0.5f);
             int alpha = (int) (textOpacitySetting * 255) << 24;
