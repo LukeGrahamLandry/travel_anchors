@@ -11,5 +11,6 @@ public class FabricModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockEntityRendererRegistry.register(FabricRegistry.ANCHOR_TILE, (ctx) -> new RenderTravelAnchor());
+        FabricNetworkHandler.initClient();
     }
 }

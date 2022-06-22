@@ -2,6 +2,7 @@ package ca.lukegrahamlandry.travelstaff.block;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
+import ca.lukegrahamlandry.travelstaff.util.GuiHelper;
 import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.client.Minecraft;
@@ -157,16 +158,12 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
                         if (name == null) name = "";
                     }
 
-                    openGui(name, pos);
+                    GuiHelper.openAnchorGui(name, pos);
                 }
             }
         }
 
         return InteractionResult.SUCCESS;
-    }
-
-    private void openGui(String name, BlockPos pos) {
-        Minecraft.getInstance().setScreen(new ScreenTravelAnchor(name, pos));
     }
 
     @Override
