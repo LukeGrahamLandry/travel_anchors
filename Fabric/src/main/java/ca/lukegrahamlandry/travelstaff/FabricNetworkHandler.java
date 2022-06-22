@@ -16,16 +16,6 @@ public class FabricNetworkHandler {
     public static final ResourceLocation ANCHOR_NAME_CHANGE = new ResourceLocation(Constants.MOD_ID, "anchor_name_change");
 
     public static void init(){
-        ClientPlayNetworking.registerGlobalReceiver(SYNC_ANCHOR_LIST, (client, handler, data, responseSender) -> {
-            AnchorListUpdateSerializer.AnchorListUpdateMessage msg = AnchorListUpdateSerializer.decode(data);
-            client.execute(() -> NetworkEventHandler.handleClientUpdateAnchorList(msg.nbt));
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(SYNC_ANCHOR_TILE, (client, handler, data, responseSender) -> {
-            SyncAnchorTileSerializer.AnchorTileMessage msg = SyncAnchorTileSerializer.decode(data);
-            client.execute(() -> NetworkEventHandler.handleSyncAnchorTile(msg.nbt, msg.pos));
-        });
-
         ServerPlayNetworking.registerGlobalReceiver(CLIENT_EVENT_TO_SERVER, (server, player, handler, data, responseSender) -> {
             if (player == null) return;
             ClientEventSerializer.ClientEvent msg = ClientEventSerializer.decode(data);
@@ -36,6 +26,18 @@ public class FabricNetworkHandler {
             if (player == null) return;
             AnchorNameChangeSerializer.AnchorNameChangeMessage msg = AnchorNameChangeSerializer.decode(data);
             server.execute(() -> NetworkEventHandler.handleNameChange(player.getLevel(), msg.pos, msg.name));
+        });
+    }
+
+    public static void initClient(){
+        ClientPlayNetworking.registerGlobalReceiver(SYNC_ANCHOR_LIST, (client, handler, data, responseSender) -> {
+            AnchorListUpdateSerializer.AnchorListUpdateMessage msg = AnchorListUpdateSerializer.decode(data);
+            client.execute(() -> NetworkEventHandler.handleClientUpdateAnchorList(msg.nbt));
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(SYNC_ANCHOR_TILE, (client, handler, data, responseSender) -> {
+            SyncAnchorTileSerializer.AnchorTileMessage msg = SyncAnchorTileSerializer.decode(data);
+            client.execute(() -> NetworkEventHandler.handleSyncAnchorTile(msg.nbt, msg.pos));
         });
     }
 }

@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.travelstaff;
 
 import ca.lukegrahamlandry.travelstaff.block.RenderTravelAnchor;
+import ca.lukegrahamlandry.travelstaff.platform.FabricNetworkHelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,5 +12,6 @@ public class FabricModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockEntityRendererRegistry.register(FabricRegistry.ANCHOR_TILE, (ctx) -> new RenderTravelAnchor());
+        FabricNetworkHandler.initClient();
     }
 }
