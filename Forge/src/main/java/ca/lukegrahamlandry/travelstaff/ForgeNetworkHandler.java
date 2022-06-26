@@ -38,7 +38,7 @@ public class ForgeNetworkHandler {
 
         INSTANCE.registerMessage(nextID(), AnchorListUpdateSerializer.AnchorListUpdateMessage.class, AnchorListUpdateSerializer::encode, AnchorListUpdateSerializer::decode, (msg, ctx) -> {
             ctx.get().enqueueWork(() -> {
-                NetworkEventHandler.handleClientUpdateAnchorList(msg.nbt);
+                ForgeClientHelper.onAnchorListUpdatePacket(msg);
             });
             ctx.get().setPacketHandled(true);
         }, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
@@ -56,10 +56,11 @@ public class ForgeNetworkHandler {
 
         INSTANCE.registerMessage(nextID(), SyncAnchorTileSerializer.AnchorTileMessage.class, SyncAnchorTileSerializer::encode, SyncAnchorTileSerializer::decode, (msg, ctx) -> {
             ctx.get().enqueueWork(() -> {
-                NetworkEventHandler.handleSyncAnchorTile(msg.nbt, msg.pos);
+                ForgeClientHelper.onSyncTilePacket(msg);
             });
             ctx.get().setPacketHandled(true);
         }, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
     }
+
+
 }

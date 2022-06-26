@@ -24,7 +24,7 @@ public class KeyboardHandlerMixin {
             EventHandlers.onJump(Minecraft.getInstance().player);
         }
         if (action == GLFW.GLFW_PRESS && Minecraft.getInstance().options.keyShift.matches(key, scanCode)){
-            EventHandlers.onSneak();
+            EventHandlers.onSneak(Minecraft.getInstance().player);
         }
     }
 }
