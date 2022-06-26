@@ -1,14 +1,13 @@
-package ca.lukegrahamlandry.travelstaff.platform;
+package ca.lukegrahamlandry.travelstaff;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
-import ca.lukegrahamlandry.travelstaff.platform.services.IPlatformHelper;
+import ca.lukegrahamlandry.travelstaff.network.AnchorListUpdateSerializer;
+import ca.lukegrahamlandry.travelstaff.network.SyncAnchorTileSerializer;
 import ca.lukegrahamlandry.travelstaff.render.TravelAnchorRenderer;
+import ca.lukegrahamlandry.travelstaff.util.NetworkEventHandler;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -16,34 +15,20 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.OptionalDouble;
 
-public class FabricPlatformHelper implements IPlatformHelper {
-
-    @Override
-    public String getPlatformName() {
-        return "Fabric";
+public class ForgeClientHelper {
+    public static void onSyncTilePacket(SyncAnchorTileSerializer.AnchorTileMessage msg){
+        NetworkEventHandler.handleSyncAnchorTile(Minecraft.getInstance().level, msg.nbt, msg.pos);
     }
 
-    @Override
-    public boolean isModLoaded(String modId) {
-
-        return FabricLoader.getInstance().isModLoaded(modId);
+    public static void onAnchorListUpdatePacket(AnchorListUpdateSerializer.AnchorListUpdateMessage msg) {
+        NetworkEventHandler.handleClientUpdateAnchorList(Minecraft.getInstance().level, msg.nbt);
     }
 
-    @Override
-    public boolean isDevelopmentEnvironment() {
-
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
-    }
-
-    @Environment(EnvType.CLIENT)
-    @Override
-    public void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean glow, boolean active, int distanceSq) {
+    public static void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean glow, boolean active, int distanceSq) {
         TravelAnchorRenderer.renderAnchor(matrixStack, buffer, null, mimic, combinedLight, glow, active, distanceSq);
     }
 
-    @Environment(EnvType.CLIENT)
-    @Override
-    public RenderType createLines(String name, int strength) {
+    public static RenderType createLines(String name, int strength) {
         return RenderType.create(Constants.MOD_ID + "_" + name,
                 DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 256, false, false,
                 RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER)
@@ -57,9 +42,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
         );
     }
 
-    @Environment(EnvType.CLIENT)
-    @Override
-    public boolean accessSortOnUpload(RenderType parent) {
+    public static boolean accessSortOnUpload(RenderType parent) {
         return parent.sortOnUpload;
     }
 }

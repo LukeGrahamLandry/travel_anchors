@@ -8,6 +8,8 @@ import ca.lukegrahamlandry.travelstaff.network.ClientEventSerializer;
 import ca.lukegrahamlandry.travelstaff.network.SyncAnchorTileSerializer;
 import ca.lukegrahamlandry.travelstaff.platform.services.INetworkHelper;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -18,6 +20,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
 public class FabricNetworkHelper implements INetworkHelper {
+    @Environment(EnvType.CLIENT)
     @Override
     public void sendNameChangeToServer(String name, BlockPos pos) {
         AnchorNameChangeSerializer.AnchorNameChangeMessage msg = new AnchorNameChangeSerializer.AnchorNameChangeMessage(pos, name);
@@ -52,6 +55,7 @@ public class FabricNetworkHelper implements INetworkHelper {
         ServerPlayNetworking.send(player, FabricNetworkHandler.SYNC_ANCHOR_LIST, data);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void sendClientEventToServer(ClientEventSerializer.ClientEvent msg) {
         FriendlyByteBuf data = PacketByteBufs.create();

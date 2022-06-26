@@ -2,7 +2,6 @@ package ca.lukegrahamlandry.travelstaff.util;
 
 import ca.lukegrahamlandry.travelstaff.network.ClientEventSerializer;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -72,11 +71,10 @@ public class EventHandlers {
         }
     }
 
-    public static void onSneak() {
-        Player player = Minecraft.getInstance().player;
+    public static void onSneak(Player player) {
         if (player != null) {
             if (Services.CONFIG.isElevatorMode()) {
-                if (TeleportHandler.canElevate(Minecraft.getInstance().player)) {
+                if (TeleportHandler.canElevate(player)) {
                     Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_DOWN);
                 }
             } else {

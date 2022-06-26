@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.travelstaff.platform;
 
 import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.ForgeClientHelper;
 import ca.lukegrahamlandry.travelstaff.platform.services.IPlatformHelper;
 import ca.lukegrahamlandry.travelstaff.render.TravelAnchorRenderer;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -34,26 +35,16 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public void renderAnchor(PoseStack matrixStack, MultiBufferSource buffer, BlockState mimic, int combinedLight, boolean glow, boolean active, int distanceSq) {
-        TravelAnchorRenderer.renderAnchor(matrixStack, buffer, null, mimic, combinedLight, glow, active, distanceSq);
+        ForgeClientHelper.renderAnchor(matrixStack, buffer, mimic, combinedLight, glow, active, distanceSq);
     }
 
     @Override
     public RenderType createLines(String name, int strength) {
-        return RenderType.create(Constants.MOD_ID + "_" + name,
-                DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 256, false, false,
-                RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER)
-                        .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(strength)))
-                        .setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING)
-                        .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                        .setOutputState(RenderStateShard.ITEM_ENTITY_TARGET)
-                        .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
-                        .setCullState(RenderStateShard.NO_CULL)
-                        .createCompositeState(false)
-        );
+        return ForgeClientHelper.createLines(name, strength);
     }
 
     @Override
     public boolean accessSortOnUpload(RenderType parent) {
-        return parent.sortOnUpload;
+        return ForgeClientHelper.accessSortOnUpload(parent);
     }
 }
