@@ -164,8 +164,11 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
         return InteractionResult.SUCCESS;
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 1.18.x
     @Override
     public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
         super.onRemove(state, level, pos, newState, isMoving);
