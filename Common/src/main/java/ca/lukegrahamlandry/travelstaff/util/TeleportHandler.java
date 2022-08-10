@@ -61,7 +61,7 @@ public class TeleportHandler {
                 if (teleportVec == null) {
                     return false;
                 }
-                player.teleportTo(teleportVec.x(), teleportVec.y(), teleportVec.z());
+                player.teleportTo(teleportVec.x()+0.5, teleportVec.y(), teleportVec.z()+0.5);
             }
             player.fallDistance = 0;
             if (hand != null) {
@@ -99,7 +99,7 @@ public class TeleportHandler {
                 if (teleportVec == null) {
                     return false;
                 }
-                player.teleportTo(teleportVec.x(), teleportVec.y(), teleportVec.z());
+                player.teleportTo(teleportVec.x()+0.5, teleportVec.y(), teleportVec.z()+0.5);
             }
             player.fallDistance = 0;
             player.swing(hand, true);
@@ -124,7 +124,10 @@ public class TeleportHandler {
     }
 
     public static boolean canPlayerTeleport(Player player, InteractionHand hand) {
-        return canItemTeleport(player, hand) || canBlockTeleport(player);
+        if (player != null) {
+            return canItemTeleport(player, hand) || canBlockTeleport(player);
+        }
+        return false;
     }
 
     public static BlockPos down(Player player){
@@ -154,7 +157,10 @@ public class TeleportHandler {
     }
     
     public static boolean canElevate(Player player) {
-        return player.getLevel().getBlockState(down(player)).getBlock() == Constants.getTravelAnchor();
+        if (player != null) {
+            return player.getLevel().getBlockState(down(player)).getBlock() == Constants.getTravelAnchor();
+        }
+        return false;
     }
     
     public static boolean elevateUp(Player player) {
