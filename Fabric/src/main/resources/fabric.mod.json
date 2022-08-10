@@ -3,7 +3,7 @@
     "id": "travelstaff",
     "version": "${version}",
   
-    "name": "Staff of Travelling",
+    "name": "Staff of Traveling",
     "description": "Brings the Travel Anchors from EnderIO into a standalone mod.",
     "authors": [
       "LukeGrahamLandry#6888",
@@ -37,7 +37,7 @@
     "depends": {
       "fabricloader": ">=0.13",
       "fabric": "*",
-      "minecraft": "1.18.x",
+      "minecraft": "1.19.x",
       "java": ">=17"
     },
   "accessWidener" : "travelstaff.accesswidener"

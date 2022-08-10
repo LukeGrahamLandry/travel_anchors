@@ -8,7 +8,7 @@ import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -69,12 +69,12 @@ public class TeleportHandler {
             }
             player.playNotifySound(SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1F, 1F);
             if (!player.level.isClientSide) {
-                player.displayClientMessage(new TranslatableComponent("travelstaff.tp.success", anchor.getRight()), true);
+                player.displayClientMessage(Component.translatable("travelstaff.tp.success", anchor.getRight()), true);
             }
             return true;
         } else {
             if (!player.level.isClientSide) {
-                player.displayClientMessage(new TranslatableComponent("travelstaff.tp.fail"), true);
+                player.displayClientMessage(Component.translatable("travelstaff.tp.fail"), true);
             }
             return false;
         }
@@ -107,7 +107,7 @@ public class TeleportHandler {
             return true;
         } else {
             if (!player.level.isClientSide) {
-                player.displayClientMessage(new TranslatableComponent("travelstaff.hop.fail"), true);
+                player.displayClientMessage(Component.translatable("travelstaff.hop.fail"), true);
             }
             return false;
         }

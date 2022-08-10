@@ -8,8 +8,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
@@ -21,7 +20,7 @@ public class ScreenTravelAnchor extends Screen {
     private EditBox textFieldWidget;
 
     public ScreenTravelAnchor(String name, BlockPos pos) {
-        super(new TextComponent(name));
+        super(Component.literal(name));
         this.name = name;
         this.pos = pos;
     }
@@ -30,7 +29,7 @@ public class ScreenTravelAnchor extends Screen {
     public void init() {
         super.init();
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
-        this.textFieldWidget = new EditBox(this.font, this.width / 2 - 50, this.height / 2 - 63, 100, 15, new TranslatableComponent("screen.travelstaff.search"));
+        this.textFieldWidget = new EditBox(this.font, this.width / 2 - 50, this.height / 2 - 63, 100, 15, Component.translatable("screen.travelstaff.search"));
         this.textFieldWidget.setMaxLength(32767);
         this.textFieldWidget.changeFocus(true);
         this.textFieldWidget.setValue(name);

@@ -2,7 +2,6 @@ package ca.lukegrahamlandry.travelstaff.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +19,7 @@ public class ItemTravelStaff extends Item {
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level, List<Component> tooltip, @Nonnull TooltipFlag flag) {
-        tooltip.add(new TranslatableComponent("tooltip.travelstaff.travel_staff").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable("tooltip.travelstaff.travel_staff").withStyle(ChatFormatting.GOLD));
     }
 
     @Override
