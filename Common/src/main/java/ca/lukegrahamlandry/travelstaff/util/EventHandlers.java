@@ -59,14 +59,15 @@ public class EventHandlers {
     }
 
     public static void onJump(Player player) {
-        if (Services.CONFIG.isElevatorMode()) {
-            if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
-                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_UP);
-            }
-
-        } else {
-            if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
-                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ANCHOR_TP);
+        if (player != null) {
+            if (Services.CONFIG.isElevatorMode()) {
+                if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
+                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_UP);
+                }
+            } else {
+                if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
+                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ANCHOR_TP);
+                }
             }
         }
     }
