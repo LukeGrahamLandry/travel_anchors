@@ -2,6 +2,7 @@ package ca.lukegrahamlandry.travelstaff.util;
 
 import ca.lukegrahamlandry.travelstaff.network.ClientEventSerializer;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
+import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -59,14 +60,15 @@ public class EventHandlers {
     }
 
     public static void onJump(Player player) {
-        if (Services.CONFIG.isElevatorMode()) {
-            if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
-                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_UP);
-            }
-
-        } else {
-            if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
-                Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ANCHOR_TP);
+        if (player != null) {
+            if (Services.CONFIG.isElevatorMode()) {
+                if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
+                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_UP);
+                }
+            } else {
+                if (TeleportHandler.canBlockTeleport(player) && !player.isShiftKeyDown()) {
+                    Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ANCHOR_TP);
+                }
             }
         }
     }

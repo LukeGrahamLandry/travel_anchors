@@ -3,6 +3,8 @@ package ca.lukegrahamlandry.travelstaff.mixin;
 import ca.lukegrahamlandry.travelstaff.util.EventHandlers;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +22,14 @@ import javax.annotation.Nullable;
 public class KeyboardHandlerMixin {
     @Inject(at = @At("HEAD"), method = "keyPress(JIIII)V")
     private void keyPress(long p_90894_, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
-        if (action == GLFW.GLFW_PRESS && Minecraft.getInstance().options.keyJump.matches(key, scanCode)){
-            EventHandlers.onJump(Minecraft.getInstance().player);
-        }
-        if (action == GLFW.GLFW_PRESS && Minecraft.getInstance().options.keyShift.matches(key, scanCode)){
-            EventHandlers.onSneak(Minecraft.getInstance().player);
+        Screen screen = Minecraft.getInstance().screen;
+        if (screen == null) {
+            if (action == GLFW.GLFW_PRESS && Minecraft.getInstance().options.keyJump.matches(key, scanCode)){
+                EventHandlers.onJump(Minecraft.getInstance().player);
+            }
+            if (action == GLFW.GLFW_PRESS && Minecraft.getInstance().options.keyShift.matches(key, scanCode)){
+                EventHandlers.onSneak(Minecraft.getInstance().player);
+            }
         }
     }
 }
