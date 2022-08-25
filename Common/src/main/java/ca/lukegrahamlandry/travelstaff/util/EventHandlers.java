@@ -14,6 +14,7 @@ public class EventHandlers {
         Level level = player.level;
         if (TeleportHandler.canPlayerTeleport(player, hand) && !stack.isEmpty()) {
             if (player.isShiftKeyDown() && TeleportHandler.canItemTeleport(player, hand)) {
+                if (player.getCooldowns().isOnCooldown(stack.getItem())) return InteractionResult.PASS;
                 if (TeleportHandler.shortTeleport(level, player, hand)) {
                     player.getCooldowns().addCooldown(stack.getItem(), Services.CONFIG.getStaffCooldown());
                     return InteractionResult.SUCCESS;
