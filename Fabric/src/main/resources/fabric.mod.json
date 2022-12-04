@@ -3,7 +3,7 @@
     "id": "travelstaff",
     "version": "${version}",
   
-    "name": "Staff of Travelling",
+    "name": "Staff of Traveling",
     "description": "Brings the Travel Anchors from EnderIO into a standalone mod.",
     "authors": [
       "LukeGrahamLandry#6888",

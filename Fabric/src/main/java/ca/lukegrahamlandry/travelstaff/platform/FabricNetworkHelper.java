@@ -49,7 +49,7 @@ public class FabricNetworkHelper implements INetworkHelper {
 
     @Override
     public void sendAnchorListToClient(ServerPlayer player) {
-        AnchorListUpdateSerializer.AnchorListUpdateMessage msg = new AnchorListUpdateSerializer.AnchorListUpdateMessage(TravelAnchorList.get(player.getCommandSenderWorld()).save(new CompoundTag()));
+        AnchorListUpdateSerializer.AnchorListUpdateMessage msg = new AnchorListUpdateSerializer.AnchorListUpdateMessage(TravelAnchorList.get(player.getCommandSenderWorld()).saveForNetwork());
         FriendlyByteBuf data = PacketByteBufs.create();
         AnchorListUpdateSerializer.encode(msg, data);
         ServerPlayNetworking.send(player, FabricNetworkHandler.SYNC_ANCHOR_LIST, data);

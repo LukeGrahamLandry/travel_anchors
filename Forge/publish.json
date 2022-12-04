@@ -1,0 +1,13 @@
+{
+  "loader": "forge",
+  "mc_versions": ["1.18.2", "1.18.1", "1.18"],
+  "releaseType": "release",
+  "modrinth": {
+    "id": "GRsgVfSq"
+  },
+  "github": {
+    "owner": "LukeGrahamLandry",
+    "repo": "travel_anchors",
+    "branch": "1.18.x"
+  }
+}

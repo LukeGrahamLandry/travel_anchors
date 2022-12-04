@@ -34,12 +34,12 @@ public class ForgeNetworkHelper implements INetworkHelper {
         if (list == null) {
             list = TravelAnchorList.get(level);
         }
-        ForgeNetworkHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new AnchorListUpdateSerializer.AnchorListUpdateMessage(list.save(new CompoundTag())));
+        ForgeNetworkHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new AnchorListUpdateSerializer.AnchorListUpdateMessage(list.saveForNetwork()));
     }
 
     @Override
     public void sendAnchorListToClient(ServerPlayer player) {
-        ForgeNetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new AnchorListUpdateSerializer.AnchorListUpdateMessage(TravelAnchorList.get(player.getCommandSenderWorld()).save(new CompoundTag())));
+        ForgeNetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new AnchorListUpdateSerializer.AnchorListUpdateMessage(TravelAnchorList.get(player.getCommandSenderWorld()).saveForNetwork()));
     }
 
     @Override
