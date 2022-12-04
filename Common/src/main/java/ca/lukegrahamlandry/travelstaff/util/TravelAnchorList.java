@@ -3,9 +3,11 @@ package ca.lukegrahamlandry.travelstaff.util;
 import ca.lukegrahamlandry.travelstaff.Constants;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -49,6 +51,7 @@ public class TravelAnchorList extends SavedData {
     public void load(@Nonnull CompoundTag nbt) {
         this.anchors.clear();
         if (nbt.contains("anchors", Tag.TAG_LIST)) {
+            boolean anyOldFormat = false;
             ListTag list = nbt.getList("anchors", Tag.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++) {
                 CompoundTag entryNBT = list.getCompound(i);
@@ -56,10 +59,25 @@ public class TravelAnchorList extends SavedData {
                     BlockPos pos = new BlockPos(entryNBT.getInt("x"), entryNBT.getInt("y"), entryNBT.getInt("z")).immutable();
                     String name = entryNBT.getString("name");
                     if (!name.isEmpty()) {
-                        this.anchors.put(pos, new Entry(entryNBT.getString("name"), entryNBT.contains("state") ? Block.stateById(entryNBT.getInt("state")) : Constants.getTravelAnchor().defaultBlockState()));
+                        BlockState state;
+
+                        if (entryNBT.contains("state2")){
+                            state = NbtUtils.readBlockState(entryNBT.getCompound("state2"));
+                        }
+                        else if (entryNBT.contains("state")){  // keep compat
+                            state = Block.stateById(entryNBT.getInt("state"));
+                            anyOldFormat = true;
+                        }
+                        else {
+                            state = Constants.getTravelAnchor().defaultBlockState();
+                        }
+
+                        this.anchors.put(pos, new Entry(entryNBT.getString("name"), state));
                     }
                 }
             }
+
+            if (anyOldFormat) this.setDirty();
         }
     }
 
@@ -73,12 +91,32 @@ public class TravelAnchorList extends SavedData {
             entryNBT.putInt("y", entry.getKey().getY());
             entryNBT.putInt("z", entry.getKey().getZ());
             entryNBT.putString("name", entry.getValue().name);
+            entryNBT.put("state2", NbtUtils.writeBlockState(entry.getValue().state));
+            list.add(entryNBT);
+        }
+        compound.put("anchors", list);
+        return compound;
+    }
+
+    // during one run we trust the blockstate id to stay the same, so we get a smaller packet by not including full infop.
+    // this also means network protocol doesn't change so compat with old versions
+    public CompoundTag saveForNetwork() {
+        CompoundTag compound = new CompoundTag();
+        ListTag list = new ListTag();
+        for (Map.Entry<BlockPos, Entry> entry : this.anchors.entrySet()) {
+            CompoundTag entryNBT = new CompoundTag();
+            entryNBT.putInt("x", entry.getKey().getX());
+            entryNBT.putInt("y", entry.getKey().getY());
+            entryNBT.putInt("z", entry.getKey().getZ());
+            entryNBT.putString("name", entry.getValue().name);
             entryNBT.putInt("state", Block.getId(entry.getValue().state));
             list.add(entryNBT);
         }
         compound.put("anchors", list);
         return compound;
     }
+
+
 
     public void setAnchor(Level level, BlockPos pos, @Nullable String name, @Nullable BlockState state) {
         if (!level.isClientSide) {
