@@ -28,8 +28,8 @@ dependencies {
     common(project(path: ":Common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":Common", configuration: "transformProductionForge")) { transitive false }
 
-    modImplementation group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19-Forge', version: '1.0.0'
-    shadowCommon group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19-Forge', version: '1.0.0'
+    modImplementation(group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19-Forge', version: '1.0.0') { transitive false }
+    shadowCommon(group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19-Forge', version: '1.0.0') { transitive false }
 }
 
 processResources {
@@ -44,6 +44,8 @@ shadowJar {
     classifier "dev-shadow"  // not obfuscated, with shadowed stuff
 
     exclude 'ca/lukegrahamlandry/lib/event/forge/WrapperLibModMain.class'
+    exclude 'ca/lukegrahamlandry/lib/helper/'
+    exclude 'ca/lukegrahamlandry/lib/data/'
     relocate 'ca.lukegrahamlandry.lib', rootProject.group + '.shadow.wrapperlib'
 
 }

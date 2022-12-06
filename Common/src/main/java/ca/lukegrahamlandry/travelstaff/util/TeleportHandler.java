@@ -1,11 +1,11 @@
 package ca.lukegrahamlandry.travelstaff.util;
 
 import ca.lukegrahamlandry.travelstaff.TravelAnchorRegistry;
+import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.block.TileTravelAnchor;
 import ca.lukegrahamlandry.travelstaff.enchantments.RangeEnchantment;
 import ca.lukegrahamlandry.travelstaff.enchantments.TeleportationEnchantment;
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
-import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -46,7 +46,7 @@ public class TeleportHandler {
                         double angle1 = Math.abs(getAngleRadians(positionVec, p1.getLeft(), player.getYRot(), player.getXRot()));
                         double angle2 = Math.abs(getAngleRadians(positionVec, p2.getLeft(), player.getYRot(), player.getXRot()));
                         return Double.compare(angle1, angle2);
-                    }).filter(p -> Math.abs(getAngleRadians(positionVec, p.getLeft(), player.getYRot(), player.getXRot())) <= Math.toRadians(Services.CONFIG.getMaxAngle()))
+                    }).filter(p -> Math.abs(getAngleRadians(positionVec, p.getLeft(), player.getYRot(), player.getXRot())) <= Math.toRadians(TravelStaffMain.CONFIG.get().maxAngle))
                     .filter(p -> canTeleportTo(level, p.getLeft()));
             return anchor.orElse(null);
         } else {
@@ -84,7 +84,7 @@ public class TeleportHandler {
         Vec3 targetVec = player.position().add(0, player.getEyeHeight(), 0);
         Vec3 lookVec = player.getLookAngle();
         BlockPos target = null;
-        for (double i = Services.CONFIG.getShortTeleportDistance(); i >= 2; i -= 0.5) {
+        for (double i = TravelStaffMain.CONFIG.get().shortTeleportDistance; i >= 2; i -= 0.5) {
             Vec3 v3d = targetVec.add(lookVec.multiply(i, i, i));
             target = new BlockPos(Math.round(v3d.x), Math.round(v3d.y), Math.round(v3d.z));
             if (canTeleportTo(level, target.below())) { //to use the same check as the anchors use the position below
@@ -153,7 +153,7 @@ public class TeleportHandler {
         int mainHandLevel = EnchantmentHelper.getItemEnchantmentLevel(RangeEnchantment.INSTANCE, player.getItemInHand(InteractionHand.MAIN_HAND));
         int offHandLevel = EnchantmentHelper.getItemEnchantmentLevel(RangeEnchantment.INSTANCE, player.getItemInHand(InteractionHand.OFF_HAND));
         int lvl = Math.max(mainHandLevel, offHandLevel);
-        return Services.CONFIG.getMaxDistance() * (1 + (lvl / 2d));
+        return TravelStaffMain.CONFIG.get().maxTeleportDistance * (1 + (lvl * TravelStaffMain.CONFIG.get().rangeEnchantScaling));
     }
     
     public static boolean canElevate(Player player) {

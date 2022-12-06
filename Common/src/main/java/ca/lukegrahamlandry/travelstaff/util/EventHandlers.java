@@ -1,5 +1,6 @@
 package ca.lukegrahamlandry.travelstaff.util;
 
+import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.network.ClientEventSerializer;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.world.InteractionHand;
@@ -16,7 +17,7 @@ public class EventHandlers {
             if (player.isShiftKeyDown() && TeleportHandler.canItemTeleport(player, hand)) {
                 if (player.getCooldowns().isOnCooldown(stack.getItem())) return InteractionResult.PASS;
                 if (TeleportHandler.shortTeleport(level, player, hand)) {
-                    player.getCooldowns().addCooldown(stack.getItem(), Services.CONFIG.getStaffCooldown());
+                    player.getCooldowns().addCooldown(stack.getItem(), TravelStaffMain.CONFIG.get().staffCooldownTicks);
                     return InteractionResult.SUCCESS;
                 }
             } else {
@@ -61,7 +62,7 @@ public class EventHandlers {
 
     public static void onJump(Player player) {
         if (player != null) {
-            if (Services.CONFIG.isElevatorMode()) {
+            if (TravelStaffMain.CLIENT_CONFIG.get().isElevatorMode) {
                 if (TeleportHandler.canElevate(player) && !player.isShiftKeyDown()) {
                     Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_UP);
                 }
@@ -75,7 +76,7 @@ public class EventHandlers {
 
     public static void onSneak(Player player) {
         if (player != null) {
-            if (Services.CONFIG.isElevatorMode()) {
+            if (TravelStaffMain.CLIENT_CONFIG.get().isElevatorMode) {
                 if (TeleportHandler.canElevate(player)) {
                     Services.NETWORK.sendClientEventToServer(ClientEventSerializer.ClientEvent.ELEVATOR_DOWN);
                 }
