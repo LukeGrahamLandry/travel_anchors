@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.travelstaff.block;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.TravelAnchorRegistry;
+import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,7 @@ public class TileTravelAnchor extends BlockEntity {
     String name = "";
 
     public TileTravelAnchor(BlockPos pos, BlockState state) {
-        super(Registry.BLOCK_ENTITY_TYPE.get(Constants.TRAVEL_ANCHOR_KEY), pos, state);
+        super(TravelAnchorRegistry.TRAVEL_ANCHOR_TILE.get(), pos, state);
     }
 
     @Override
@@ -37,13 +38,13 @@ public class TileTravelAnchor extends BlockEntity {
     }
 
     private void writeMimic(CompoundTag tag) {
-        tag.put("mimic", NbtUtils.writeBlockState(this.mimic == null ? Constants.getTravelAnchor().defaultBlockState() : this.mimic));
+        tag.put("mimic", NbtUtils.writeBlockState(this.mimic == null ? TravelAnchorRegistry.TRAVEL_ANCHOR.get().defaultBlockState() : this.mimic));
     }
 
     public void readMimic(CompoundTag tag) {
         if (tag.contains("mimic")) {
             BlockState state = NbtUtils.readBlockState(tag.getCompound("mimic"));
-            if (state == Constants.getTravelAnchor().defaultBlockState()) {
+            if (state == TravelAnchorRegistry.TRAVEL_ANCHOR.get().defaultBlockState()) {
                 this.mimic = null;
             } else {
                 this.mimic = state;

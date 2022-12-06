@@ -1,6 +1,6 @@
 package ca.lukegrahamlandry.travelstaff.platform;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.platform.services.IConfigHelper;
 import ca.lukegrahamlandry.travelstaff.platform.services.INetworkHelper;
 import ca.lukegrahamlandry.travelstaff.platform.services.IPlatformHelper;
@@ -18,7 +18,7 @@ public class Services {
         final T loadedService = ServiceLoader.load(clazz)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
-        Constants.LOG.debug("Loaded {} for service {}", loadedService, clazz);
+        TravelStaffMain.LOG.debug("Loaded {} for service {}", loadedService, clazz);
         return loadedService;
     }
 }

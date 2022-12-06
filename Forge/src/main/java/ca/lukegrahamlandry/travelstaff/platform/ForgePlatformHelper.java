@@ -1,20 +1,13 @@
 package ca.lukegrahamlandry.travelstaff.platform;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
 import ca.lukegrahamlandry.travelstaff.ForgeClientHelper;
 import ca.lukegrahamlandry.travelstaff.platform.services.IPlatformHelper;
-import ca.lukegrahamlandry.travelstaff.render.TravelAnchorRenderer;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
-
-import java.util.OptionalDouble;
 
 public class ForgePlatformHelper implements IPlatformHelper {
     @Override

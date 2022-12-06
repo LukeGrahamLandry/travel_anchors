@@ -29,7 +29,7 @@ public class ForgeClientHelper {
     }
 
     public static RenderType createLines(String name, int strength) {
-        return RenderType.create(Constants.MOD_ID + "_" + name,
+        return RenderType.create(TravelStaffMain.MOD_ID + "_" + name,
                 DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 256, false, false,
                 RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER)
                         .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(strength)))

@@ -1,6 +1,6 @@
 package ca.lukegrahamlandry.travelstaff.render;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.TravelAnchorRegistry;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
@@ -33,7 +33,7 @@ public class TravelAnchorRenderer {
     public static final RenderType BOLD_LINES = Services.PLATFORM.createLines("bold_lines", 3);
     public static final RenderType VERLY_BOLD_LINES = Services.PLATFORM.createLines("very_bold_lines", 5);
 
-    public static BakedModel MODEL = Minecraft.getInstance().getBlockRenderer().getBlockModel(Constants.getTravelAnchor().defaultBlockState());
+    public static BakedModel MODEL = Minecraft.getInstance().getBlockRenderer().getBlockModel(TravelAnchorRegistry.TRAVEL_ANCHOR.get().defaultBlockState());
 
     public static void renderAnchors(PoseStack poseStack, float partialTick) {
         ClientLevel level = Minecraft.getInstance().level;
@@ -134,7 +134,7 @@ public class TravelAnchorRenderer {
     }
 
     public static void renderAnchor(PoseStack poseStack, MultiBufferSource buffer, @Nullable String name, BlockState state, int light, boolean glow, boolean active, double distanceSq) {
-        if (state == null || state.getBlock() == Constants.getTravelAnchor()) {
+        if (state == null || state.getBlock() == TravelAnchorRegistry.TRAVEL_ANCHOR.get()) {
             VertexConsumer vertex = buffer.getBuffer(RenderType.solid());
             //noinspection deprecation
             Minecraft.getInstance().getBlockRenderer().getModelRenderer()

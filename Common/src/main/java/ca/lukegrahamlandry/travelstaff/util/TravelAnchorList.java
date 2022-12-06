@@ -1,9 +1,9 @@
 package ca.lukegrahamlandry.travelstaff.util;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.TravelAnchorRegistry;
+import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -31,7 +31,7 @@ public class TravelAnchorList extends SavedData {
     public static TravelAnchorList get(Level level) {
         if (!level.isClientSide) {
             DimensionDataStorage storage = ((ServerLevel) level).getDataStorage();
-            return storage.computeIfAbsent(TravelAnchorList::new, TravelAnchorList::new, Constants.MOD_ID);
+            return storage.computeIfAbsent(TravelAnchorList::new, TravelAnchorList::new, TravelStaffMain.MOD_ID);
         } else {
             return clientInstance;
         }
@@ -69,7 +69,7 @@ public class TravelAnchorList extends SavedData {
                             anyOldFormat = true;
                         }
                         else {
-                            state = Constants.getTravelAnchor().defaultBlockState();
+                            state = TravelAnchorRegistry.TRAVEL_ANCHOR.get().defaultBlockState();
                         }
 
                         this.anchors.put(pos, new Entry(entryNBT.getString("name"), state));
@@ -128,7 +128,7 @@ public class TravelAnchorList extends SavedData {
                     needsUpdate = true;
                 }
             } else {
-                if (state == null) state = Constants.getTravelAnchor().defaultBlockState();
+                if (state == null) state = TravelAnchorRegistry.TRAVEL_ANCHOR.get().defaultBlockState();
                 Entry oldEntry = this.anchors.getOrDefault(immutablePos, null);
                 if (oldEntry == null || !oldEntry.name.equals(name) || oldEntry.state != state) {
                     this.anchors.put(pos.immutable(), new Entry(name, state));

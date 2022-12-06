@@ -1,6 +1,6 @@
 package ca.lukegrahamlandry.travelstaff.util;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.TravelAnchorRegistry;
 import ca.lukegrahamlandry.travelstaff.block.TileTravelAnchor;
 import ca.lukegrahamlandry.travelstaff.enchantments.RangeEnchantment;
 import ca.lukegrahamlandry.travelstaff.enchantments.TeleportationEnchantment;
@@ -135,7 +135,7 @@ public class TeleportHandler {
     }
 
     public static boolean canBlockTeleport(Player player) {
-        return player.getLevel().getBlockState(down(player)).getBlock() == Constants.getTravelAnchor();// && !player.isShiftKeyDown();
+        return player.getLevel().getBlockState(down(player)).getBlock() == TravelAnchorRegistry.TRAVEL_ANCHOR.get();// && !player.isShiftKeyDown();
     }
 
     public static boolean canItemTeleport(Player player, InteractionHand hand) {
@@ -158,7 +158,7 @@ public class TeleportHandler {
     
     public static boolean canElevate(Player player) {
         if (player != null) {
-            return player.getLevel().getBlockState(down(player)).getBlock() == Constants.getTravelAnchor();
+            return player.getLevel().getBlockState(down(player)).getBlock() == TravelAnchorRegistry.TRAVEL_ANCHOR.get();
         }
         return false;
     }
@@ -169,12 +169,12 @@ public class TeleportHandler {
         }
         Level level = player.getLevel();
         BlockPos.MutableBlockPos searchPos = player.blockPosition().immutable().mutable();
-        while (!level.isOutsideBuildHeight(searchPos) && (level.getBlockState(searchPos).getBlock() != Constants.getTravelAnchor() || !canTeleportTo(level, searchPos))) {
+        while (!level.isOutsideBuildHeight(searchPos) && (level.getBlockState(searchPos).getBlock() != TravelAnchorRegistry.TRAVEL_ANCHOR.get() || !canTeleportTo(level, searchPos))) {
             searchPos.move(Direction.UP);
         }
         BlockState state = level.getBlockState(searchPos);
         Pair<BlockPos, String> anchor = null;
-        if (state.getBlock() == Constants.getTravelAnchor() && canTeleportTo(level, searchPos)) {
+        if (state.getBlock() == TravelAnchorRegistry.TRAVEL_ANCHOR.get() && canTeleportTo(level, searchPos)) {
             BlockPos target = searchPos.immutable();
             BlockEntity tile = level.getBlockEntity(target);
             if (tile instanceof TileTravelAnchor) {
@@ -193,12 +193,12 @@ public class TeleportHandler {
         }
         Level level = player.getLevel();
         BlockPos.MutableBlockPos searchPos = player.blockPosition().immutable().below(2).mutable();
-        while (!level.isOutsideBuildHeight(searchPos) && (level.getBlockState(searchPos).getBlock() != Constants.getTravelAnchor() || !canTeleportTo(level, searchPos))) {
+        while (!level.isOutsideBuildHeight(searchPos) && (level.getBlockState(searchPos).getBlock() != TravelAnchorRegistry.TRAVEL_ANCHOR.get() || !canTeleportTo(level, searchPos))) {
             searchPos.move(Direction.DOWN);
         }
         BlockState state = level.getBlockState(searchPos);
         Pair<BlockPos, String> anchor = null;
-        if (state.getBlock() == Constants.getTravelAnchor() && canTeleportTo(level, searchPos)) {
+        if (state.getBlock() == TravelAnchorRegistry.TRAVEL_ANCHOR.get() && canTeleportTo(level, searchPos)) {
             BlockPos target = searchPos.immutable();
             BlockEntity tile = level.getBlockEntity(target);
             if (tile instanceof TileTravelAnchor) {

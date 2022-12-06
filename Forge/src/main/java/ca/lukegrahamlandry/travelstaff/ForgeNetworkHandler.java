@@ -22,7 +22,7 @@ public class ForgeNetworkHandler {
     }
 
     public static void registerPackets(){
-        INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Constants.MOD_ID, "packets"), () -> "1.0", s -> true, s -> true);
+        INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(TravelStaffMain.MOD_ID, "packets"), () -> "1.0", s -> true, s -> true);
 
 
         INSTANCE.registerMessage(nextID(), AnchorNameChangeSerializer.AnchorNameChangeMessage.class, AnchorNameChangeSerializer::encode, AnchorNameChangeSerializer::decode, (msg, ctx) -> {

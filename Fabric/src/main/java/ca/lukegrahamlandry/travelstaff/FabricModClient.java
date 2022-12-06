@@ -1,5 +1,6 @@
 package ca.lukegrahamlandry.travelstaff;
 
+import ca.lukegrahamlandry.lib.event.fabric.WrapperLibClientInitializer;
 import ca.lukegrahamlandry.travelstaff.block.RenderTravelAnchor;
 import ca.lukegrahamlandry.travelstaff.network.AnchorListUpdateSerializer;
 import ca.lukegrahamlandry.travelstaff.network.SyncAnchorTileSerializer;
@@ -18,7 +19,8 @@ import static ca.lukegrahamlandry.travelstaff.FabricNetworkHandler.SYNC_ANCHOR_T
 public class FabricModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        BlockEntityRendererRegistry.register(FabricRegistry.ANCHOR_TILE, (ctx) -> new RenderTravelAnchor());
+        new WrapperLibClientInitializer().onInitializeClient();
+        BlockEntityRendererRegistry.register(TravelAnchorRegistry.TRAVEL_ANCHOR_TILE.get(), (ctx) -> new RenderTravelAnchor());
         initClientPackets();
     }
 

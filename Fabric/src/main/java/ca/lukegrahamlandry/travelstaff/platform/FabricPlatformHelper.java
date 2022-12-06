@@ -1,6 +1,6 @@
 package ca.lukegrahamlandry.travelstaff.platform;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.platform.services.IPlatformHelper;
 import ca.lukegrahamlandry.travelstaff.render.TravelAnchorRenderer;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -44,7 +44,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Environment(EnvType.CLIENT)
     @Override
     public RenderType createLines(String name, int strength) {
-        return RenderType.create(Constants.MOD_ID + "_" + name,
+        return RenderType.create(TravelStaffMain.MOD_ID + "_" + name,
                 DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.LINES, 256, false, false,
                 RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_LINES_SHADER)
                         .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(strength)))

@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.travelstaff.block;
 
-import ca.lukegrahamlandry.travelstaff.Constants;
+import ca.lukegrahamlandry.travelstaff.TravelAnchorRegistry;
+import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
 import ca.lukegrahamlandry.travelstaff.util.GuiHelper;
 import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
@@ -45,7 +46,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return Registry.BLOCK_ENTITY_TYPE.get(Constants.TRAVEL_ANCHOR_KEY).create(pos, state);
+        return TravelAnchorRegistry.TRAVEL_ANCHOR_TILE.get().create(pos, state);
     }
 
     static Random rand = new Random();
@@ -83,7 +84,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
         BlockEntity tile = level.getBlockEntity(pos);
         if (tile instanceof TileTravelAnchor) {
             BlockState mimic = ((TileTravelAnchor) tile).getMimic();
-            if (mimic != null && !mimic.is(Constants.getTravelAnchor())) {
+            if (mimic != null && !mimic.is(TravelAnchorRegistry.TRAVEL_ANCHOR.get())) {
                 return mimic.getShape(level, pos, context);
             }
         }
@@ -96,7 +97,7 @@ public class BlockTravelAnchor extends Block implements EntityBlock {
         BlockEntity tile = level.getBlockEntity(pos);
         if (tile instanceof TileTravelAnchor) {
             BlockState mimic = ((TileTravelAnchor) tile).getMimic();
-            if (mimic != null && !mimic.is(Constants.getTravelAnchor())) {
+            if (mimic != null && !mimic.is(TravelAnchorRegistry.TRAVEL_ANCHOR.get())) {
                 return mimic.getCollisionShape(level, pos, context);
             }
         }
