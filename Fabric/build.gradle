@@ -1,75 +1,69 @@
 plugins {
-    id 'fabric-loom' version '0.12-SNAPSHOT'
-    id 'maven-publish'
-    id 'idea'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
-archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
-
-dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    implementation project(":Common")
+architectury {
+    platformSetupLoomIde()
+    fabric()
 }
 
 loom {
-    runs {
-        client {
-            client()
-            setConfigName("Fabric Client")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-        server {
-            server()
-            setConfigName("Fabric Server")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-    }
-
-    accessWidenerPath = file("src/main/resources/travelstaff.accesswidener")
-
+    accessWidenerPath = file("src/main/resources/travelstaff-fabric.accessWidener")
 }
 
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    common(project(path: ":Common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":Common", configuration: "transformProductionFabric")) { transitive false }
+
+    modImplementation group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19-Fabric', version: '1.0.0'
+    shadowCommon group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19-Fabric', version: '1.0.0'
+}
 
 processResources {
-    from project(":Common").sourceSets.main.resources
-    inputs.property "version", project.version
+    filesMatching("fabric.mods.json") {
+        expand "version": project.mod_version
+    }
+    inputs.property "fabric.mods.json", project.mod_version
+}
 
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
+shadowJar {
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"  // not obfuscated, with shadowed stuff
+
+    relocate 'ca.lukegrahamlandry.lib', rootProject.group + '.shadow.wrapperlib'
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    classifier null  // obfuscated, with shadowed stuff
+}
+
+task renameJarForPublication(type: Zip, dependsOn: remapJar) {
+    from remapJar.archiveFile.map { zipTree(it) }
+    extension "jar"
+    metadataCharset "UTF-8"
+    destinationDirectory = base.libsDirectory
+    classifier project.name
+}
+
+assemble.dependsOn renameJarForPublication
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
     }
 }
 
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${mod_name}" }
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-        }
-    }
-
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
-}
-
-
+apply from: "https://moddingtutorials.org/publish.gradle"

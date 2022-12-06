@@ -1,16 +1,16 @@
 pluginManagement {
     repositories {
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://maven.architectury.dev/" }
+        maven { url "https://files.minecraftforge.net/maven/" }
         gradlePluginPortal()
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Sponge Snapshots'
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
     }
 }
 
-rootProject.name = 'MultiLoader'
-include("Common", "Fabric", "Forge")
+if (JavaVersion.current().ordinal() + 1 < 17) {
+    throw new IllegalStateException("Please run gradle with Java 17+!")
+}
+
+include(":Common", ":Forge", ":Fabric")
+
+rootProject.name = 'StaffOfTraveling'

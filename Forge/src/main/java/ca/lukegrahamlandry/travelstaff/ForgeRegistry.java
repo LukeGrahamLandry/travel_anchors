@@ -1,10 +1,12 @@
 package ca.lukegrahamlandry.travelstaff;
 
+import ca.lukegrahamlandry.lib.registry.RegistryWrapper;
 import ca.lukegrahamlandry.travelstaff.block.BlockTravelAnchor;
 import ca.lukegrahamlandry.travelstaff.block.TileTravelAnchor;
 import ca.lukegrahamlandry.travelstaff.enchantments.RangeEnchantment;
 import ca.lukegrahamlandry.travelstaff.enchantments.TeleportationEnchantment;
 import ca.lukegrahamlandry.travelstaff.item.ItemTravelStaff;
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -35,7 +37,7 @@ public class ForgeRegistry {
     public static final RegistryObject<Enchantment> RANGE = ENCHANTMENTS.register("range", () -> RangeEnchantment.INSTANCE);
     public static final RegistryObject<Enchantment> TELEPORTATION = ENCHANTMENTS.register("teleportation", () -> TeleportationEnchantment.INSTANCE);
 
-    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Constants.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MOD_ID);
     public static final RegistryObject<BlockEntityType<TileTravelAnchor>> TRAVEL_ANCHOR_TILE = TILE_ENTITY_TYPES.register(Constants.TRAVEL_ANCHOR_KEY.getPath(),
             () -> BlockEntityType.Builder.of(TileTravelAnchor::new, TRAVEL_ANCHOR.get()).build(null));
 }

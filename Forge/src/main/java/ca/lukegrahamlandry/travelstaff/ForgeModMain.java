@@ -1,5 +1,7 @@
 package ca.lukegrahamlandry.travelstaff;
 
+import ca.lukegrahamlandry.lib.config.ConfigWrapper;
+import ca.lukegrahamlandry.lib.network.NetworkWrapper;
 import ca.lukegrahamlandry.travelstaff.block.RenderTravelAnchor;
 import ca.lukegrahamlandry.travelstaff.render.TravelAnchorRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,6 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class ForgeModMain {
     
     public ForgeModMain() {
+        NetworkWrapper.handshake("test", "1");
         ForgeNetworkHandler.registerPackets();
         ForgeRegistry.init(FMLJavaModLoadingContext.get().getModEventBus());
 

@@ -4,7 +4,7 @@
     "version": "${version}",
   
     "name": "Staff of Traveling",
-    "description": "Brings the Travel Anchors from EnderIO into a standalone mod.",
+    "description": "Brings the Travel Anchors from EnderIO into a standalone mod. \nIncludes LukeGrahamLandry/WrapperLib (MPL 2.0)",
     "authors": [
       "LukeGrahamLandry#6888",
       "CastCrafter",
@@ -40,6 +40,6 @@
       "minecraft": "1.19.x",
       "java": ">=17"
     },
-  "accessWidener" : "travelstaff.accesswidener"
+  "accessWidener" : "travelstaff-fabric.accesswidener"
 }
   

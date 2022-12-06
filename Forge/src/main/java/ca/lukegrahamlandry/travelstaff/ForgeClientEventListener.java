@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ForgeClientEventListener {
     @SubscribeEvent
-    public void onKey(InputEvent.KeyInputEvent event) {
+    public void onKey(InputEvent.Key event) {
         if (event.getAction() == GLFW.GLFW_PRESS && event.getKey() == Minecraft.getInstance().options.keyJump.getKey().getValue()){
             EventHandlers.onJump(Minecraft.getInstance().player);
         }

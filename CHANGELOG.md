@@ -1,3 +1,7 @@
+## 1.2.13
+
+- build against 1.19.2
+
 ## 1.2.12
 
 Save the whole block state in TravelAnchorList instead of just the id. 
