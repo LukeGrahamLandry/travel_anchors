@@ -6,6 +6,7 @@ import ca.lukegrahamlandry.travelstaff.platform.Services;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -43,7 +44,7 @@ public class TileTravelAnchor extends BlockEntity {
 
     public void readMimic(CompoundTag tag) {
         if (tag.contains("mimic")) {
-            BlockState state = NbtUtils.readBlockState(tag.getCompound("mimic"));
+            BlockState state = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("mimic"));
             if (state == TravelAnchorRegistry.TRAVEL_ANCHOR.get().defaultBlockState()) {
                 this.mimic = null;
             } else {

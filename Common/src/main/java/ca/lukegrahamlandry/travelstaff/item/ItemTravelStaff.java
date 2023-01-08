@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ItemTravelStaff extends Item {
     public ItemTravelStaff(Properties properties) {
-        super(properties.tab(CreativeModeTab.TAB_TRANSPORTATION));
+        super(properties);
     }
 
     @Override

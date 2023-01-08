@@ -5,6 +5,7 @@ import ca.lukegrahamlandry.travelstaff.TravelStaffMain;
 import ca.lukegrahamlandry.travelstaff.platform.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -62,7 +63,7 @@ public class TravelAnchorList extends SavedData {
                         BlockState state;
 
                         if (entryNBT.contains("state2")){
-                            state = NbtUtils.readBlockState(entryNBT.getCompound("state2"));
+                            state = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), entryNBT.getCompound("state2"));
                         }
                         else if (entryNBT.contains("state")){  // keep compat
                             state = Block.stateById(entryNBT.getInt("state"));

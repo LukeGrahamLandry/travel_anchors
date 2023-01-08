@@ -6,8 +6,7 @@ import ca.lukegrahamlandry.travelstaff.util.TeleportHandler;
 import ca.lukegrahamlandry.travelstaff.util.TravelAnchorList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -26,6 +25,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 
@@ -205,15 +205,15 @@ public class TravelAnchorRenderer {
 
         public void apply(PoseStack poseStack) {
             if (!Float.isNaN(this.y)) {
-                poseStack.mulPose(Vector3f.YP.rotation(this.y));
+                poseStack.mulPose(Axis.YP.rotation(this.y));
             }
-            poseStack.mulPose(Vector3f.ZP.rotation(this.z));
+            poseStack.mulPose(Axis.ZP.rotation(this.z));
         }
 
         public void reverse(PoseStack poseStack) {
-            poseStack.mulPose(Vector3f.ZP.rotation(-this.z));
+            poseStack.mulPose(Axis.ZP.rotation(-this.z));
             if (!Float.isNaN(this.y)) {
-                poseStack.mulPose(Vector3f.YP.rotation(-this.y));
+                poseStack.mulPose(Axis.YP.rotation(-this.y));
             }
         }
     }

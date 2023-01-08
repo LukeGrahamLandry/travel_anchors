@@ -2,7 +2,7 @@ package ca.lukegrahamlandry.travelstaff;
 
 import ca.lukegrahamlandry.lib.event.fabric.WrapperLibModInitializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 public class FabricModMain implements ModInitializer {
     @Override
@@ -11,5 +11,10 @@ public class FabricModMain implements ModInitializer {
         TravelStaffMain.init();
         FabricEventListener.init();
         FabricNetworkHandler.init();
+
+	ItemGroupEvents.MODIFY_ENTRIES_ALL.register((tab, entries) -> {
+		TravelAnchorRegistry.fillItemCategory(tab, entries.getDisplayStacks());
+		TravelAnchorRegistry.fillItemCategory(tab, entries.getSearchTabStacks());
+	});
     }
 }
