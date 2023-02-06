@@ -1,0 +1,24 @@
+{
+  "itemGroup.travelstaff": "旅行锚点",
+
+  "item.travelstaff.travel_staff": "旅行手杖",
+
+  "enchantment.travelstaff.range": "远途",
+  "enchantment.travelstaff.teleportation": "传送",
+
+  "block.travelstaff.travel_anchor": "旅行锚点",
+
+  "screen.travelstaff.travel_anchor": "旅行锚点",
+  "screen.travelstaff.search": "搜索",
+  "screen.travelstaff.nameless": "输入一个名字",
+
+  "tooltip.travelstaff.travel_anchor_block": "查看旅行手杖，或是通过传送附魔来实现传送。",
+  "tooltip.travelstaff.travel_staff": "潜行右击来实现短途传送，查看旅行锚点来进行远距离折跃。",
+
+  "travelstaff.tp.success": "传送到%s。",
+  "travelstaff.tp.fail": "未找到旅行锚点。",
+  "travelstaff.hop.fail": "目的地受阻。",
+
+  "enchantment.travelstaff.teleportation.desc": "允许你如同拿着旅行手杖一样进行传送",
+  "enchantment.travelstaff.range.desc": "增加你可通过旅行手杖进行传送的距离"
+}
