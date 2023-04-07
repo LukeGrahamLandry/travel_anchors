@@ -28,7 +28,6 @@ public class ScreenTravelAnchor extends Screen {
     @Override
     public void init() {
         super.init();
-        Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
         this.textFieldWidget = new EditBox(this.font, this.width / 2 - 50, this.height / 2 - 63, 100, 15, Component.translatable("screen.travelstaff.search"));
         this.textFieldWidget.setMaxLength(32767);
         this.textFieldWidget.changeFocus(true);
@@ -76,7 +75,6 @@ public class ScreenTravelAnchor extends Screen {
     @Override
     public void removed() {
         super.removed();
-        Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(false);
         if (Minecraft.getInstance().level != null) {
             Services.NETWORK.sendNameChangeToServer(this.textFieldWidget.getValue().trim(), this.pos);
         }
