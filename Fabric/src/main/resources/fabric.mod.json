@@ -37,8 +37,9 @@
     "depends": {
       "fabricloader": ">=0.13",
       "fabric": "*",
-      "minecraft": "1.19.x",
-      "java": ">=17"
+      "minecraft": "1.19.3",
+      "java": ">=17",
+      "wrapperlib": ">=1.1"
     },
   "accessWidener" : "travelstaff-fabric.accesswidener"
 }

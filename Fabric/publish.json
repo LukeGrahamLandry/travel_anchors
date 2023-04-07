@@ -1,6 +1,6 @@
 {
   "loader": "fabric",
-  "mc_versions": ["1.19.2", "1.19.1", "1.19"],
+  "mc_versions": ["1.19.3"],
   "releaseType": "release",
   "curseforge": {
     "id": "603970"
@@ -11,6 +11,6 @@
   "github": {
     "owner": "LukeGrahamLandry",
     "repo": "travel_anchors",
-    "branch": "1.19.x"
+    "branch": "1.19.3"
   }
 }

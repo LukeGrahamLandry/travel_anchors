@@ -26,8 +26,7 @@ dependencies {
     common(project(path: ":Common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":Common", configuration: "transformProductionFabric")) { transitive false }
 
-    modImplementation(group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19.3-Fabric', version: '1.1.0') { transitive false }
-    shadowCommon(group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19.3-Fabric', version: '1.1.0') { transitive false }
+    modImplementation(group: 'ca.lukegrahamlandry.lib', name: 'WrapperLib-1.19.3-Fabric', version: '1.1.5') { transitive false }
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 }
@@ -42,10 +41,6 @@ processResources {
 shadowJar {
     configurations = [project.configurations.shadowCommon]
     classifier "dev-shadow"  // not obfuscated, with shadowed stuff
-
-    exclude 'ca/lukegrahamlandry/lib/helper/'
-    exclude 'ca/lukegrahamlandry/lib/data/'
-    relocate 'ca.lukegrahamlandry.lib', rootProject.group + '.shadow.wrapperlib'
 }
 
 remapJar {

@@ -1,3 +1,8 @@
+## 1.2.14
+
+- don't shadow WrapperLib (architectury inject packages are hard to exclude and would conflict?)
+- add comments in default generated config file
+
 ## 1.2.13
 
 - build against 1.19.2

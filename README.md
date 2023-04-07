@@ -19,8 +19,12 @@ Ported from https://www.curseforge.com/minecraft/mc-mods/travel-anchors
 - **Enchantments**
   - Enchant a weapon or digger item with Teleportation to make it act like a Staff of Travelling
   - Enchant a Staff of Travelling with Range to increase the max range you can teleport to travel anchors
-
-TODO
-
-- config
-- help gui button 
+- **Config**
+  - `world/serverconfig/travelstaff-synced.json5` (use `/reload` command to refresh without restarting game)
+    - maxTeleportDistance: how far can you teleport to a travel anchor
+    - shortTeleportDistance: how far can you teleport with just a staff of traveling
+    - staffCooldownTicks: how long must you wait before using the staff of traveling again
+    - rangeEnchantScaling: how effective is the range enchantment. range to travel anchor will be multiplied by 1 + (lvl * scaling)
+    - maxAngle: maximum angle you can look at the travel anchor and still teleport to it
+  - `minecraft/config/travelstaff-client.json5`
+    - isElevatorMode: while on anchor, press Jump to teleport to an anchor directly above you or Sneak to teleport to an anchor directly below you
