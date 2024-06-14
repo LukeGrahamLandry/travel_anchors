@@ -1,0 +1,24 @@
+{
+  "itemGroup.travelstaff": "Travel Anchors",
+
+  "item.travelstaff.travel_staff": "Посох путешествий",
+
+  "enchantment.travelstaff.range": "Диапазон",
+  "enchantment.travelstaff.teleportation": "Телепортация",
+
+  "block.travelstaff.travel_anchor": "Якорь путешествия",
+
+  "screen.travelstaff.travel_anchor": "Якорь путешествия",
+  "screen.travelstaff.search": "Поиск",
+  "screen.travelstaff.nameless": "Введите название чтобы использовать его",
+
+  "tooltip.travelstaff.travel_anchor_block": "Посмотрите на него с помощью Посоха путешествий, или с зачарованием «Телепортации» чтобы телепортироваться.",
+  "tooltip.travelstaff.travel_staff": "Шифт + ПКМ для короткой телепортации. Смотрите на Якорь путешествия чтобы телепортироваться.",
+
+  "travelstaff.tp.success": "Телепортирован на: %s.",
+  "travelstaff.tp.fail": "Не найден Якорь путешествия.",
+  "travelstaff.hop.fail": "Место назначения заблокировано.",
+
+  "enchantment.travelstaff.teleportation.desc": "Позволяет вам телепортироваться, как если бы вы держали Посох путешествий.",
+  "enchantment.travelstaff.range.desc": "Увеличивает расстояние, на которое вы можете телепортироваться с помощью Посоха путешествий"
+}
